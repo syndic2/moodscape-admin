@@ -33,14 +33,6 @@
             "scripts": []
           },
           "configurations": {
-            "development": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
-            },
             "production": {
               "fileReplacements": [
                 {
@@ -76,9 +68,6 @@
             "browserTarget": "moodscape-admin:build"
           },
           "configurations": {
-            "development": {
-              "browserTarget": "moodscape-admin:build:development"
-            },
             "production": {
               "browserTarget": "moodscape-admin:build:production"
             }
