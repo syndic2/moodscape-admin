@@ -1,3 +1,10 @@
-<p>main works!</p>
-
-<router-outlet></router-outlet>
+<Header (toogleSideBarEmitter)="toogleSideBar()"></Header>
+<mat-drawer-container>
+  <mat-drawer mode="side" [opened]="sideBarOpen">
+    <SideBar></SideBar>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
+<!--<Footer></Footer>-->

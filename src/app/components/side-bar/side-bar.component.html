@@ -1,0 +1,33 @@
+<mat-nav-list>
+  <div class="profile-card">
+    <div class="header">
+      <h2>John Doe</h2>
+      <h4>johndoe@mail.com</h4>
+    </div>
+    <img src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="">
+  </div>
+  <mat-divider></mat-divider>
+  <h2 matSubheader>Menu</h2>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/dashboard']">
+    <mat-icon>dashboard</mat-icon> Dashboard
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/users-growth']">
+    <mat-icon>people</mat-icon> Perkembangan Pengguna
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/moods-growth']">
+    <mat-icon>mood</mat-icon> Perkembangan Mood
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/articles']">
+    <mat-icon>library_books</mat-icon> Kelola Artikel
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/themes']">
+    <mat-icon>color_lens</mat-icon> Kelola Tema
+  </a>
+  <h2 matSubheader>Umpan Balik</h2>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/feedbacks-chatbot']">
+    <mat-icon>chat</mat-icon> Chatbot
+  </a>
+  <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/feedbacks-app']">
+    <mat-icon>phone_android</mat-icon> Aplikasi
+  </a>
+</mat-nav-list>
