@@ -1,8 +1,8 @@
-<main style="padding: 1rem;">
-  <div>
+<main style="padding: 1.5rem;" fxLayout="column" fxLayoutGap="30px">
+  <div class="mat-elevation-z8">
     <LineChartArea></LineChartArea>
   </div>
-  <div class="stat-cards" style="margin-top: 1rem;" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+  <div class="stat-cards" fxLayout="row" fxLayoutGap="30px">
     <mat-card class="mat-elevation-z8" fxFlex="25">
       <LineChartStat label="Pengguna" total="18" percentage="50"></LineChartStat>
     </mat-card>
@@ -16,11 +16,10 @@
       <LineChartStat label="Umpan Balik" total="120" percentage="100"></LineChartStat>
     </mat-card>
   </div>
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" style="margin-top: 1rem;">
+  <div fxLayout="row" fxLayoutGap="30px">
     <div fxFlex="60">
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" style="width: 100%;">
-
           <!-- Position Column -->
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -52,7 +51,7 @@
         <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
-    <div fxFlex="40">
+    <div class="mat-elevation-z8" fxFlex="40">
       <PieChart></PieChart>
     </div>
   </div>
