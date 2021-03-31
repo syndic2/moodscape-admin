@@ -1,1 +1,5 @@
-<p>articles works!</p>
+<main class="p-6">
+    <quill-editor [styles]="{ height: '15rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
+    <h2 class="text-3xl">Output: </h2>
+    <div [innerHtml]="editorContent"></div>
+</main>
