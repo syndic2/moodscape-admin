@@ -8,10 +8,6 @@ import * as Highcharts from 'highcharts';
   styleUrls: ['./line-chart-stat.component.scss']
 })
 export class LineChartStatComponent implements OnInit {
-  @Input() label: string;
-  @Input() total: number;
-  @Input() percentage: number;
-
   public Highcharts= Highcharts;
   public chartOptions= {};
 

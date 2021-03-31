@@ -4,7 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { HighchartsChartModule } from 'highcharts-angular';
 
@@ -31,7 +30,6 @@ const MaterialModules= [
   imports: [
     CommonModule,
     ...MaterialModules,
-    FlexLayoutModule,
     HighchartsChartModule,
     DashboardRoutingModule
   ]

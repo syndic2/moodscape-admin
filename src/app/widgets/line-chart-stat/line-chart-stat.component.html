@@ -1,16 +1,5 @@
-<div class="text">
-  <h4>{{ label }}</h4>
-  <span class="total">{{ total }}k</span>
-  <span>
-    <mat-icon color="primary">trending_up</mat-icon>
-  </span>
-  <span class="description">{{ percentage }}%</span>
-  <span> of target</span>
-</div>
-<div class="widget">
-  <highcharts-chart
-    style="display: block;"
-    [Highcharts]="Highcharts"
-    [options]="chartOptions">
-  </highcharts-chart>
-</div>
+<highcharts-chart
+  style="display: block;"
+  [Highcharts]="Highcharts"
+  [options]="chartOptions">
+</highcharts-chart>

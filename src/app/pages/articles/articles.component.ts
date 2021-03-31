@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 
@@ -10,19 +10,30 @@ import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
   styleUrls: ['./articles.component.scss']
 })
 export class ArticlesComponent implements OnInit {
+  public articleForm: FormGroup;
   public editorContent: string;
 
-  constructor(private titleService: Title, private snackBar: MatSnackBar) {
+  constructor(private titleService: Title, private formBuilder: FormBuilder) {
     this.titleService.setTitle('Kelola Artikel');
+    this.articleForm= this.formBuilder.group({
+      title: [''],
+      shortSummary: [''],
+      author: [''],
+      postedAt: [''],
+      reviewedBy: [''],
+      headImg: [''],
+      content: ['']
+    });
   }
 
   ngOnInit(): void {
-    this.snackBar.open('Snackbar is working!');
   }
 
   editorChanged(event: EditorChangeContent | EditorChangeSelection) {
-    console.log('editor got changed', event);
-
     this.editorContent= event.editor.root.innerHTML;
+  }
+
+  onSubmit() {
+    console.log(this.articleForm.value);
   }
 }

@@ -1,5 +1,46 @@
-<main class="p-6">
-    <quill-editor [styles]="{ height: '15rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
-    <h2 class="text-3xl">Output: </h2>
-    <div [innerHtml]="editorContent"></div>
+<main class="p-7">
+  <form [formGroup]="articleForm">
+    <mat-card class="mat-elevation-z8 w-1/2 mx-auto">
+      <mat-card-content>
+        <p>
+          <mat-form-field class="w-full">
+            <mat-label>Judul</mat-label>
+            <input matInput formControlName="title" placeholder="Judul">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="w-full">
+            <mat-label>Ringkasan pendek</mat-label>
+            <input matInput formControlName="shortSummary" placeholder="Ringkasan pendek">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="w-full">
+            <mat-label>Penulis</mat-label>
+            <input matInput formControlName="author" placeholder="Penulis">
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="w-full" appearance="fill">
+            <mat-label>Waktu posting</mat-label>
+            <input matInput [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUI #picker></mat-datepicker>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="w-full">
+            <mat-label>Diulas oleh</mat-label>
+            <input matInput formControlName="reviewedBy" placeholder="Diulas oleh">
+          </mat-form-field>
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <p class="mat-elevation-z8 w-4/5 mx-auto mt-8">
+      <quill-editor formControlName="content" [styles]="{ height: '25rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
+    </p>
+    <p class="text-center">
+      <button mat-raised-button color="primary" (click)="onSubmit()">Simpan</button>
+    </p>
+  </form>
 </main>
