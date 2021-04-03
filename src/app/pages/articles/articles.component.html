@@ -1,46 +1,100 @@
-<main class="p-7">
-  <form [formGroup]="articleForm">
-    <mat-card class="mat-elevation-z8 w-1/2 mx-auto">
-      <mat-card-content>
-        <p>
-          <mat-form-field class="w-full">
-            <mat-label>Judul</mat-label>
-            <input matInput formControlName="title" placeholder="Judul">
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field class="w-full">
-            <mat-label>Ringkasan pendek</mat-label>
-            <input matInput formControlName="shortSummary" placeholder="Ringkasan pendek">
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field class="w-full">
-            <mat-label>Penulis</mat-label>
-            <input matInput formControlName="author" placeholder="Penulis">
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field class="w-full" appearance="fill">
-            <mat-label>Waktu posting</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUI #picker></mat-datepicker>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field class="w-full">
-            <mat-label>Diulas oleh</mat-label>
-            <input matInput formControlName="reviewedBy" placeholder="Diulas oleh">
-          </mat-form-field>
-        </p>
-      </mat-card-content>
-    </mat-card>
-    <p class="mat-elevation-z8 w-4/5 mx-auto mt-8">
-      <quill-editor formControlName="content" [styles]="{ height: '25rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
-    </p>
-    <p class="text-center">
-      <button mat-raised-button color="primary" (click)="onSubmit()">Simpan</button>
-    </p>
-  </form>
-</main>
+<mat-tab-group animationDuration="0ms" (selectedTabChange)="changeTab($event)">
+  <mat-tab label="Atur Artikel">
+    <form class="p-7" [formGroup]="articleForm">
+      <mat-card class="mat-elevation-z8 w-1/2 mx-auto">
+        <mat-card-content>
+          <p>
+            <mat-form-field class="w-full">
+              <mat-label>Judul</mat-label>
+              <input matInput formControlName="title" placeholder="Judul">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-full">
+              <mat-label>Ringkasan pendek</mat-label>
+              <input matInput formControlName="shortSummary" placeholder="Ringkasan pendek">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-full">
+              <mat-label>Penulis</mat-label>
+              <input matInput formControlName="author" placeholder="Penulis">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-full" appearance="fill">
+              <mat-label>Waktu posting</mat-label>
+              <input matInput [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker touchUI #picker></mat-datepicker>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-full">
+              <mat-label>Diulas oleh</mat-label>
+              <input matInput formControlName="reviewedBy" placeholder="Diulas oleh">
+            </mat-form-field>
+          </p>
+        </mat-card-content>
+      </mat-card>
+      <p class="mat-elevation-z8 w-4/5 mx-auto mt-8">
+        <quill-editor formControlName="content" [styles]="{ height: '25rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
+      </p>
+      <p class="text-center">
+        <button mat-raised-button color="primary" (click)="onSubmit()">Simpan</button>
+      </p>
+    </form>
+  </mat-tab>
+  <mat-tab label="Daftar Artikel">
+    <div class="p-7">
+      <button class="float-right" mat-mini-fab color="primary" (click)="loadArticle()">
+        <mat-icon>sync</mat-icon>
+      </button>
+      <mat-form-field class="w-full">
+        <mat-label>Cari artikel</mat-label>
+        <input matInput placeholder="Judul artikel" (input)="searchArticle($event)">
+      </mat-form-field>
+      <mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async" ></mat-progress-bar>
+      <div class="mat-elevation-z8 relative">
+        <div class="absolute z-10 w-full h-full bg-black bg-opacity-50" *ngIf="loaderService.isLoading | async">
+          <mat-spinner class="top-1/2 left-1/2"></mat-spinner>
+        </div>
+        <table class="w-full" mat-table [dataSource]="tableDataSource" matSort>
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Judul</th>
+            <td mat-cell *matCellDef="let article">{{ article.title }}</td>
+          </ng-container>
+          <ng-container matColumnDef="author">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Penulis</th>
+            <td mat-cell *matCellDef="let article">{{ article.author }}</td>
+          </ng-container>
+          <ng-container matColumnDef="postedAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Waktu Posting</th>
+            <td mat-cell *matCellDef="let article">{{ article.postedAt }}</td>
+          </ng-container>
+          <ng-container matColumnDef="reviewedBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Diulas Oleh</th>
+            <td mat-cell *matCellDef="let article">{{ article.reviewedBy }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let article">
+              <button mat-mini-fab color="primary" (click)="editArticle(article)">
+                <mat-icon class="text-base">edit</mat-icon>
+              </button> &nbsp;
+              <button mat-mini-fab color="primary" (click)="removeArticle(article)">
+                <mat-icon class="text-base">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">Artikel tidak ditemukan</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
