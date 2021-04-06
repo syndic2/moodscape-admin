@@ -1,0 +1,48 @@
+<button class="float-right" mat-mini-fab color="primary" (click)="loadArticles(true)">
+  <mat-icon [ngClass]="{ 'animate-spin': loaderService.isLoading | async }">sync</mat-icon>
+</button>
+<mat-form-field class="w-full">
+  <mat-label>Cari artikel</mat-label>
+  <input matInput placeholder="Judul artikel" (input)="searchArticle($event)">
+</mat-form-field>
+<mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async" ></mat-progress-bar>
+<div class="mat-elevation-z8 relative">
+  <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="loaderService.isLoading | async">
+    <mat-spinner class="m-auto"></mat-spinner>
+  </div>
+  <table class="w-full" mat-table [dataSource]="tableDataSource" matSort>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Judul</th>
+      <td mat-cell *matCellDef="let article">{{ article.title }}</td>
+    </ng-container>
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Penulis</th>
+      <td mat-cell *matCellDef="let article">{{ article.author }}</td>
+    </ng-container>
+    <ng-container matColumnDef="postedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Waktu Posting</th>
+      <td mat-cell *matCellDef="let article">{{ article.postedAt }}</td>
+    </ng-container>
+    <ng-container matColumnDef="reviewedBy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Diulas Oleh</th>
+      <td mat-cell *matCellDef="let article">{{ article.reviewedBy }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let article">
+        <button mat-mini-fab color="primary" (click)="editArticle(article)">
+          <mat-icon class="text-base">edit</mat-icon>
+        </button> &nbsp;
+        <button mat-mini-fab color="primary" (click)="removeArticle(article)">
+          <mat-icon class="text-base">delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Artikel tidak ditemukan</td>
+    </tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+</div>
