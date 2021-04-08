@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
@@ -10,6 +9,7 @@ import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/services/article/article.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 
+import { DialogComponent } from 'src/app/components/utilities/dialog/dialog.component';
 import { ConfirmationDialogComponent } from 'src/app/components/utilities/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -70,6 +70,18 @@ export class ListArticleComponent implements OnInit {
       if (res === 'yes') {
         const articles: Article[]= this.tableDataSource.data.filter(obj => obj.Id !== article.Id);
         this.tableDataSource= new MatTableDataSource(articles);
+      }
+    });
+  }
+
+  seeContent(article: Article) {
+    this.dialog.open(DialogComponent, {
+      data: {
+        title: article.title,
+        message: `<p>${article.content}</p>`,
+        buttonText: {
+          close: 'OK'
+        }
       }
     });
   }

@@ -12,39 +12,46 @@
         <mat-form-field class="w-full">
           <mat-label>Judul</mat-label>
           <input matInput formControlName="title" placeholder="Judul">
+          <mat-error *ngIf="articleForm.get('title').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Ringkasan pendek</mat-label>
           <textarea matInput formControlName="shortSummary" rows="5" placeholder="Ringkasan pendek"></textarea>
+          <mat-error *ngIf="articleForm.get('shortSummary').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Penulis</mat-label>
           <input matInput formControlName="author" placeholder="Penulis">
+          <mat-error *ngIf="articleForm.get('author').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Waktu posting</mat-label>
           <input matInput formControlName="postedAt" placeholder="Waktu posting">
+          <mat-error *ngIf="articleForm.get('postedAt').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
-          <mat-label>Diulas oleh</mat-label>
-          <input matInput formControlName="reviewedBy" placeholder="Diulas oleh" >
+          <input matInput formControlName="reviewedBy" placeholder="Diulas oleh">
+          <mat-error *ngIf="articleForm.get('reviewedBy').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
     </mat-card-content>
   </mat-card>
-  <p class="mat-elevation-z8 w-4/5 mx-auto mt-8">
-    <mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async" ></mat-progress-bar>
-    <quill-editor formControlName="content" [styles]="{ height: '30rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
-  </p>
-  <p class="text-center">
+  <div class="mt-8 mb-8">
+    <span class="text-red-600 italic" *ngIf="articleForm.get('content').hasError('required')">Isi konten tidak boleh kosong.</span>
+    <div class="mat-elevation-z8 mt-2">
+      <mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async"></mat-progress-bar>
+      <quill-editor formControlName="content" [styles]="{ height: '30rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
+    </div>
+  </div>
+  <p class="text-center mb-0">
     <button mat-raised-button color="primary" (click)="onSave()">Simpan</button>
   </p>
 </form>

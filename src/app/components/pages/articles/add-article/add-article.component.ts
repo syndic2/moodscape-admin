@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 
 import { ArticleService } from 'src/app/services/article/article.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
+
+import { DialogComponent } from 'src/app/components/utilities/dialog/dialog.component';
 
 @Component({
   selector: 'AddArticle',
@@ -18,6 +21,7 @@ export class AddArticleComponent implements OnInit {
   public editorContent: string;
 
   constructor(
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     public articleService: ArticleService,
     public loaderService: LoaderService
@@ -31,12 +35,12 @@ export class AddArticleComponent implements OnInit {
 
   initializeForm() {
     this.articleForm= this.formBuilder.group({
-      title: [''],
-      shortSummary: [''],
-      author: ['Admin'],
-      postedAt: [''],
-      reviewedBy: [''],
-      content: ['']
+      title: ['', Validators.required],
+      shortSummary: ['', Validators.required],
+      author: ['Admin', Validators.required],
+      postedAt: ['', Validators.required],
+      reviewedBy: ['', Validators.required],
+      content: ['', Validators.required]
     });
   }
 
@@ -63,11 +67,23 @@ export class AddArticleComponent implements OnInit {
   }
 
   onSave() {
-    this.articleService.update(this.selectedArticle, this.articleForm.getRawValue()).subscribe(res => {
-      this.selectedArticle= '';
+    if (this.articleForm.invalid) {
+      this.dialog.open(DialogComponent, {
+        data: {
+          title: 'Simpan artikel gagal!',
+          message: 'Tidak boleh ada kolom yang kosong.',
+          buttonText: {
+            close: 'OK'
+          }
+        }
+      });
+    } else {
+      this.articleService.update(this.selectedArticle, this.articleForm.getRawValue()).subscribe(res => {
+        this.selectedArticle= '';
 
-      if (!res.updated) this.clearForm();
-    });
+        if (!res.updated) this.clearForm();
+      });
+    }
   }
 
   //QUILL EDITOR

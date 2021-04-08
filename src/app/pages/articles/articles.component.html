@@ -1,11 +1,11 @@
 <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)" (selectedTabChange)="changeTab($event)">
   <mat-tab label="Atur Artikel">
-    <div class="p-7">
+    <div class="p-8">
       <AddArticle [selectedArticle]="selectedArticle"></AddArticle>
     </div>
   </mat-tab>
   <mat-tab label="Daftar Artikel">
-    <div class="p-7">
+    <div class="p-8">
       <ListArticle (selectedArticle)="onSelectedArticle($event)"></ListArticle>
     </div>
   </mat-tab>
