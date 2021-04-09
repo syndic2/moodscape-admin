@@ -5,6 +5,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/services/article/article.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
@@ -66,8 +69,10 @@ export class ListArticleComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((res: string) => {
-      if (res === 'yes') {
+    dialogRef.afterClosed().pipe(
+      switchMap((confirm: string) => confirm === 'yes' ? this.articleService.deleteOne(article.Id) : of(null))
+    ).subscribe(res => {
+      if (res?.response?.status) {
         const articles: Article[]= this.tableDataSource.data.filter(obj => obj.Id !== article.Id);
         this.tableDataSource= new MatTableDataSource(articles);
       }

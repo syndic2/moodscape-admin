@@ -79,8 +79,6 @@ export class AddArticleComponent implements OnInit {
       });
     } else {
       this.articleService.update(this.selectedArticle, this.articleForm.getRawValue()).subscribe(res => {
-        this.selectedArticle= '';
-
         if (!res.updated) this.clearForm();
       });
     }

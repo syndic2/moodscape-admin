@@ -1,6 +1,13 @@
-<button class="float-right" mat-mini-fab color="primary" (click)="loadArticles(true)">
-  <mat-icon [ngClass]="{ 'animate-spin': loaderService.isLoading | async }">sync</mat-icon>
-</button>
+<div class="flex justify-end">
+  <button mat-mini-fab color="primary" (click)="loadArticles(true)">
+    <mat-icon [ngClass]="{ 'animate-spin': loaderService.isLoading | async }">sync</mat-icon>
+  </button>
+</div>
+<div class="flex justify-end mt-2">
+  <span>
+    <b>Total:</b> {{ tableDataSource?.data.length }}
+  </span>
+</div>
 <mat-form-field class="w-full">
   <mat-label>Cari artikel</mat-label>
   <input matInput placeholder="Judul artikel" (input)="searchArticle($event)">

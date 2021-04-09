@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import StringifyObject from 'stringify-object';
 
+import { filterObjectProps } from 'src/app/utilities/helpers';
 import { environment }from 'src/environments/environment';
 
 @Injectable({
@@ -68,7 +69,7 @@ export class ArticleService {
   }
 
   update(id, data): Observable<any> {
-    const args= StringifyObject(data, { singleQuotes: false });
+    const args= StringifyObject(filterObjectProps(data), { singleQuotes: false });
     const query= `
       mutation {
         updateArticle(Id: "${id}", fields: ${args}) {
@@ -85,6 +86,23 @@ export class ArticleService {
 
     return this.http.post(`${environment.api_url}`, { query: query }, this.httpOptions).pipe(
       map((res: any) => res.data.updateArticle)
+    );
+  }
+
+  deleteOne(id): Observable<any> {
+    const query= `
+      mutation {
+        deleteArticle(Id: "${id}") {
+          response {
+            text,
+            status
+          }
+        }
+      }
+    `;
+
+    return this.http.post(`${environment.api_url}`, { query: query }, this.httpOptions).pipe(
+      map((res: any) => res.data.deleteArticle)
     );
   }
 }
