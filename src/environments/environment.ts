@@ -2,10 +2,21 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const urls= {
+  baseUrl: {
+    development: 'http://localhost:4200',
+    production: '',
+  },
+  apiUrl: {
+    development: 'http://127.0.0.1:5000/api/graphql',
+    production: 'https://moodscape-api.herokuapp.com/api/graphql',
+  },
+};
+
 export const environment = {
   production: false,
-  base_url: 'http://localhost:4200',
-  api_url: 'http://127.0.0.1:5000/api/graphql'
+  baseUrl: urls.baseUrl.development,
+  apiUrl: urls.apiUrl.development,
 };
 
 /*

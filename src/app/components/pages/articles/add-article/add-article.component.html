@@ -1,57 +1,65 @@
-<button class="float-right" mat-mini-fab color="primary" (click)="clearForm()">
+<button class="float-right" mat-mini-fab color="warn" (click)="resetForm()">
   <mat-icon>clear</mat-icon>
 </button>
-<form class="relative clear-both" [formGroup]="articleForm">
-  <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="loaderService.isLoading | async">
+<form [formGroup]="createArticleForm" class="relative clear-both">
+  <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
     <mat-spinner class="m-auto"></mat-spinner>
   </div>
   <mat-card class="mat-elevation-z8 w-3/5 mx-auto">
-    <mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async" ></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async" ></mat-progress-bar>
     <mat-card-content>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Judul</mat-label>
           <input matInput formControlName="title" placeholder="Judul">
-          <mat-error *ngIf="articleForm.get('title').hasError('required')">Judul tidak boleh kosong.</mat-error>
+          <mat-error *ngIf="createArticleForm.get('title').hasError('required')">Judul tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Ringkasan pendek</mat-label>
           <textarea matInput formControlName="shortSummary" rows="5" placeholder="Ringkasan pendek"></textarea>
-          <mat-error *ngIf="articleForm.get('shortSummary').hasError('required')">Judul tidak boleh kosong.</mat-error>
+          <!--<mat-error *ngIf="createArticleForm.get('shortSummary').hasError('required')">Ringkasan tidak boleh kosong.</mat-error>-->
         </mat-form-field>
       </p>
       <p>
         <mat-form-field class="w-full">
           <mat-label>Penulis</mat-label>
           <input matInput formControlName="author" placeholder="Penulis">
-          <mat-error *ngIf="articleForm.get('author').hasError('required')">Judul tidak boleh kosong.</mat-error>
+          <mat-error *ngIf="createArticleForm.get('author').hasError('required')">Penulis tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field class="w-full">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Waktu posting</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="postedAt" placeholder="Waktu posting">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="createArticleForm.get('postedAt').hasError('required')">Waktu posting tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <!--<mat-form-field class="w-full">
           <mat-label>Waktu posting</mat-label>
           <input matInput formControlName="postedAt" placeholder="Waktu posting">
-          <mat-error *ngIf="articleForm.get('postedAt').hasError('required')">Judul tidak boleh kosong.</mat-error>
-        </mat-form-field>
+          <mat-error *ngIf="createArticleForm.get('postedAt').hasError('required')">Waktu posting tidak boleh kosong.</mat-error>
+        </mat-form-field>-->
       </p>
       <p>
         <mat-form-field class="w-full">
           <input matInput formControlName="reviewedBy" placeholder="Diulas oleh">
-          <mat-error *ngIf="articleForm.get('reviewedBy').hasError('required')">Judul tidak boleh kosong.</mat-error>
+          <mat-error *ngIf="createArticleForm.get('reviewedBy').hasError('required')">Diulas tidak boleh kosong.</mat-error>
         </mat-form-field>
       </p>
     </mat-card-content>
   </mat-card>
   <div class="mt-8 mb-8">
-    <span class="text-red-600 italic" *ngIf="articleForm.get('content').hasError('required')">Isi konten tidak boleh kosong.</span>
+    <span class="text-red-600 italic" *ngIf="createArticleForm.get('content').hasError('required')">Isi konten tidak boleh kosong.</span>
     <div class="mat-elevation-z8 mt-2">
-      <mat-progress-bar mode="indeterminate" *ngIf="loaderService.isLoading | async"></mat-progress-bar>
-      <quill-editor formControlName="content" [styles]="{ height: '30rem' }" (onEditorChanged)="editorChanged($event)"></quill-editor>
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+      <quill-editor formControlName="content" [styles]="{ height: '30rem' }" (onEditorChanged)="onEditorChanged($event)"></quill-editor>
     </div>
   </div>
   <p class="text-center mb-0">
-    <button mat-raised-button color="primary" (click)="onSave()">Simpan</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">Simpan</button>
   </p>
 </form>

@@ -1,53 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import StringifyObject from 'stringify-object';
+import gql from 'graphql-query-compress';
 
-import { filterObjectProps } from 'src/app/utilities/helpers';
 import { environment }from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private httpOptions: any= {
-    responseType: 'json'
-  };
-
   constructor(private http: HttpClient) { }
 
-  private defaultHeaders() {
-    return new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json');
-  }
-
-  getOne(id: string): Observable<any> {
-    const query= `
+  getArticles(title: string= ''): Observable<any> {
+    const query= gql(`
       query {
-        article(Id: "${id}") {
-          title,
-          shortSummary,
-          author,
-          postedAt,
-          reviewedBy,
-          content,
-        }
-      }
-    `;
-
-    this.httpOptions.headers= null;
-
-    return this.http.get(`${environment.api_url}?query=${query}`, this.httpOptions).pipe(
-      map((res: any) => res.data.article)
-    );
-  }
-
-  getAll(): Observable<any> {
-    const query= `
-      query {
-        allArticle(fields: {}) {
+        getArticles(title: "${title}") {
           Id,
           title,
           shortSummary,
@@ -56,53 +27,115 @@ export class ArticleService {
           reviewedBy,
           headerImg,
           content,
+          urlName,
           url
         }
       }
-    `;
+    `);
 
-    this.httpOptions.headers= null;
-
-    return this.http.get(`${environment.api_url}?query=${query}`, this.httpOptions).pipe(
-      map((res: any) => res.data.allArticle)
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getArticles)
     );
   }
 
-  update(id, data): Observable<any> {
-    const args= StringifyObject(filterObjectProps(data), { singleQuotes: false });
-    const query= `
+  getArticle(id: string): Observable<any> {
+    const query= gql(`
+      query {
+        getArticle(Id: "${id}") {
+          Id,
+          title,
+          shortSummary,
+          author,
+          postedAt,
+          reviewedBy,
+          headerImg,
+          content,
+          urlName,
+          url
+        }
+      }
+    `);
+
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getArticle)
+    );
+  }
+
+  createArticle(fields: {}): Observable<any> {
+    const args= StringifyObject(fields, { singleQuotes: false });
+    const query= gql(`
       mutation {
-        updateArticle(Id: "${id}", fields: ${args}) {
-          updated,
+        createArticle(fields: ${args}) {
+          createdArticle {
+            Id,
+            title,
+            shortSummary,
+            author,
+            postedAt,
+            reviewedBy,
+            headerImg,
+            content,
+            urlName,
+            url
+          },
           response {
             text,
             status
           }
         }
       }
-    `;
+    `);
 
-    this.httpOptions.headers= this.defaultHeaders();
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+      map((res: any) => res.data.createArticle)
+    );
+  }
 
-    return this.http.post(`${environment.api_url}`, { query: query }, this.httpOptions).pipe(
+  updateArticle(articleId, fields: {}): Observable<any> {
+    const args= StringifyObject(fields, { singleQuotes: false });
+    const query= gql(`
+      mutation {
+        updateArticle(Id: ${articleId}, fields: ${args}) {
+          updatedArticle {
+            Id,
+            title,
+            shortSummary,
+            author,
+            postedAt,
+            reviewedBy,
+            headerImg,
+            content,
+            urlName,
+            url
+          },
+          response {
+            text,
+            status
+          }
+        }
+      }
+    `);
+
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
       map((res: any) => res.data.updateArticle)
     );
   }
 
-  deleteOne(id): Observable<any> {
-    const query= `
+  removeArticles(articleIds: number[]): Observable<any> {
+    const query= gql(`
       mutation {
-        deleteArticle(Id: "${id}") {
+        removeArticles(articleIds: ${articleIds}) {
+          removedArticles,
           response {
             text,
             status
           }
         }
       }
-    `;
+    `);
 
-    return this.http.post(`${environment.api_url}`, { query: query }, this.httpOptions).pipe(
-      map((res: any) => res.data.deleteArticle)
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+      map((res: any) => res.data.removeArticles)
     );
   }
 }

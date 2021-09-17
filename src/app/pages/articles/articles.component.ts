@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
 
-import { Article } from 'src/app/models/article';
+import { Subject } from 'rxjs';
 
 import { AddArticleComponent } from 'src/app/components/pages/articles/add-article/add-article.component';
 import { ListArticleComponent } from 'src/app/components/pages/articles/list-article/list-article.component';
@@ -17,7 +17,7 @@ export class ArticlesComponent implements OnInit {
   @ViewChild(ListArticleComponent) listArticleComponent: ListArticleComponent;
 
   public selectedTab: FormControl= new FormControl(0);
-  public selectedArticle;
+  public articleId: Subject<number>= new Subject<number>();
 
   constructor(private titleService: Title) {
     this.titleService.setTitle('Kelola Artikel');
@@ -27,19 +27,8 @@ export class ArticlesComponent implements OnInit {
     this.selectedTab.setValue(1);
   }
 
-  changeTab(event) {
-    if (event.index === 1) {
-      this.listArticleComponent.loadArticles();
-    }
-  }
-
-  onSelectedArticle(article_id) {
-    this.selectedArticle= article_id;
-
+  onSelectArticle(articleId) {
+    this.articleId.next(articleId);
     this.selectedTab.setValue(0);
-    this.addArticleComponent.articleService.getOne(article_id).subscribe((res: Article) => {
-      this.addArticleComponent.articleForm.setValue(res);
-      this.addArticleComponent.editMode(res.author);
-    })
   }
 }
