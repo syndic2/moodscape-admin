@@ -37,7 +37,7 @@ export class ArticleEffects {
 
   validateCreateArticle$= createEffect(() => this.actions$.pipe(
     ofType(validateCreateArticle),
-    switchMap(({ fields, isInvalid }) => {
+    switchMap(({ fields, headerImgUpload, isInvalid }) => {
       if (isInvalid) {
         return [
           setIsResetForm({ isReset: false }),
@@ -54,13 +54,13 @@ export class ArticleEffects {
         ];
       }
 
-      return [fetchCreateArticle({ fields: fields })];
+      return [fetchCreateArticle({ fields: fields, headerImgUpload })];
     })
   ));
 
   createArticle$= createEffect(() => this.actions$.pipe(
     ofType(fetchCreateArticle),
-    concatMap(({ fields }) => this.articleService.createArticle(fields).pipe(
+    concatMap(({ fields, headerImgUpload }) => this.articleService.createArticle(fields, headerImgUpload).pipe(
       switchMap(res => [
         setIsResetForm({ isReset: true }),
         showDialog({
@@ -134,11 +134,11 @@ export class ArticleEffects {
       });
 
       return dialogRef.afterClosed().pipe(
-        map(confirmation => ({ confirmation: confirmation, articleIds: articleIds }))
+        map(data => ({ dialogData: data, articleIds: articleIds }))
       )
     }),
     map(res => {
-      if (res.confirmation === 'yes') {
+      if (res.dialogData.confirmation === 'yes') {
         this.store.dispatch(fetchRemoveArticles({ articleIds: res.articleIds }));
       }
     })

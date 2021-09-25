@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LineChartStatComponent } from './line-chart-stat.component';
+import { UserDetailModalComponent } from './user-detail-modal.component';
 
-describe('LineChartStatComponent', () => {
-  let component: LineChartStatComponent;
-  let fixture: ComponentFixture<LineChartStatComponent>;
+describe('UserDetailModalComponent', () => {
+  let component: UserDetailModalComponent;
+  let fixture: ComponentFixture<UserDetailModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LineChartStatComponent ]
+      declarations: [ UserDetailModalComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LineChartStatComponent);
+    fixture = TestBed.createComponent(UserDetailModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

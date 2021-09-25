@@ -1,10 +1,10 @@
-<Header (toogleSideBarEmitter)="toogleSideBar()"></Header>
+<app-header (toogleSideBarEmitter)="toogleSideBar()"></app-header>
 <mat-sidenav-container class="h-full">
   <mat-sidenav mode="side" [opened]="sideBarOpen">
-    <SideBar></SideBar>
+    <side-bar></side-bar>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<!--<Footer></Footer>-->
+<!--<app-footer></app-footer>-->

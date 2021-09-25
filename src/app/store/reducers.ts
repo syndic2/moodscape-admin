@@ -2,10 +2,12 @@ import { ActionReducer, ActionReducerMap, INIT, MetaReducer } from '@ngrx/store'
 
 import { StoreFeatureKeys } from './feature-keys';
 import { applicationReducer } from './reducers/application.reducer';
+import { userReducer } from './reducers/user.reducer';
 import { articleReducer } from './reducers/article.reducer';
 
 export const reducers: ActionReducerMap<any>= {
   [StoreFeatureKeys.APPLICATION]: applicationReducer,
+  [StoreFeatureKeys.USER]: userReducer,
   [StoreFeatureKeys.ARTICLE]: articleReducer
 };
 

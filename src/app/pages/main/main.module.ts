@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -14,7 +15,7 @@ import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 
-const MaterialModules= [
+const Materials= [
   MatIconModule,
   MatButtonModule,
   MatDividerModule,
@@ -33,7 +34,7 @@ const MaterialModules= [
   ],
   imports: [
     CommonModule,
-    ...MaterialModules,
+    ...Materials,
     MainRoutingModule
   ]
 })

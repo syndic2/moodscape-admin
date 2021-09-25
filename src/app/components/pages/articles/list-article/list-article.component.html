@@ -12,11 +12,11 @@
   <div class="flex justify-center">
     <mat-form-field class="w-1/2">
       <mat-label>Cari artikel</mat-label>
-      <input matInput placeholder="Judul artikel" (input)="search($event)">
+      <input matInput (input)="onSearch($event)">
     </mat-form-field>
   </div>
 
-  <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async" ></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
 
   <div class="mat-elevation-z8 relative">
     <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
@@ -59,7 +59,7 @@
       <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">Artikel tidak ditemukan</td>
+        <td class="mat-cell" colspan="4">-Artikel tidak ditemukan-</td>
       </tr>
     </table>
 

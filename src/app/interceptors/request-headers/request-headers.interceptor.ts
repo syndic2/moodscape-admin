@@ -8,17 +8,21 @@ export class RequestHeadersInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    request= request.clone({
-      responseType: 'json'
-    });
+    const skipInterceptor= request.headers.get('skipRequestHeadersInterceptor');
 
-    if (request.method === 'POST') {
+    if (!skipInterceptor) {
       request= request.clone({
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        })
+        responseType: 'json'
       });
+
+      if (request.method === 'POST') {
+        request= request.clone({
+          headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          })
+        });
+      }
     }
 
     return next.handle(request);

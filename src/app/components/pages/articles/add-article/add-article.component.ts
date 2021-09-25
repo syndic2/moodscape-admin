@@ -6,7 +6,8 @@ import { Subject, Subscription } from 'rxjs';
 
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 
-import { transformDateTime } from 'src/app/utilities/helpers';
+import { checkFileType, transformDateTime } from 'src/app/utilities/helpers';
+import { showDialog } from 'src/app/store/actions/application.actions';
 import { validateCreateArticle, validateUpdateArticle } from 'src/app/store/actions/article.actions';
 import { getIsResetForm } from 'src/app/store/selectors/application.selectors';
 import { getArticle } from 'src/app/store/selectors/article.selectors';
@@ -25,6 +26,9 @@ export class AddArticleComponent implements OnInit, OnDestroy {
   private getIsResetFormSubscription: Subscription;
   private articleIdValue: number;
   private contentValue: string;
+  public headerImage: string;
+  private headerImgUpload: File;
+  private validImgType: boolean= true;
 
   constructor(private store: Store, private formBuilder: FormBuilder, public utilitiesService: UtilitiesService) {
     this.initializeForm();
@@ -40,13 +44,16 @@ export class AddArticleComponent implements OnInit, OnDestroy {
     this.articleIdSubject.subscribe(value => {
       this.articleIdValue= value;
       this.getArticleSubscription= this.store.select(getArticle({ Id: value })).subscribe(res => {
-        this.createArticleForm.patchValue({ ...res });
+        const results= { ...res };
+
+        this.headerImage= results.headerImg;
+        this.createArticleForm.patchValue(results);
         this.createArticleForm.updateValueAndValidity();
 
         if (res.author !== 'admin') {
-          this.createArticleForm.controls['author'].disable();
-          this.createArticleForm.controls['postedAt'].disable();
-          this.createArticleForm.controls['reviewedBy'].disable();
+          this.author.disable();
+          this.postedAt.disable();
+          this.reviewedBy.disable();
         }
       });
     });
@@ -58,17 +65,42 @@ export class AddArticleComponent implements OnInit, OnDestroy {
     this.getIsResetFormSubscription && this.getIsResetFormSubscription.unsubscribe();
   }
 
+  get title() {
+    return this.createArticleForm.get('title');
+  }
+
+  get shortSummary() {
+    return this.createArticleForm.get('shortSummary');
+  }
+
+  get author() {
+    return this.createArticleForm.get('author');
+  }
+
   get postedAt() {
-    return this.createArticleForm.get('postedAt').value;
+    return this.createArticleForm.get('postedAt');
+  }
+
+  get reviewedBy() {
+    return this.createArticleForm.get('reviewedBy');
+  }
+
+  get headerImgUrl() {
+    return this.createArticleForm.get('headerImg');
+  }
+
+  get content() {
+    return this.createArticleForm.get('content');
   }
 
   initializeForm() {
     this.createArticleForm= this.formBuilder.group({
       title: ['', Validators.required],
-      shortSummary: ['', Validators.required],
+      shortSummary: [''],
       author: ['admin', Validators.required],
       postedAt: ['', Validators.required],
       reviewedBy: ['admin', Validators.required],
+      headerImg: [''],
       content: ['', Validators.required]
     });
   }
@@ -76,10 +108,37 @@ export class AddArticleComponent implements OnInit, OnDestroy {
   resetForm() {
     this.createArticleForm.reset();
     this.createArticleForm.enable();
-    this.createArticleForm.controls['author'].setValue('admin');
-    this.createArticleForm.controls['reviewedBy'].setValue('admin');
+    this.author.setValue('admin');
+    this.reviewedBy.setValue('admin');
     this.articleIdValue= null;
+    this.headerImage= '';
+    this.headerImgUpload= null;
     this.getArticleSubscription && this.getArticleSubscription.unsubscribe();
+  }
+
+  onSelectFile(event) {
+    if (!checkFileType(event.target.files, ['jpg', 'jpeg', 'png'])) {
+      this.validImgType= false;
+      this.store.dispatch(showDialog({
+        config: {
+          data: {
+            message: 'Ektensi file tidak sesuai dengan file gambar, harus menggunakan ektensi jpg, jpeg atau png',
+            buttonText: {
+              close: 'OK'
+            }
+          }
+        }
+      }));
+    } else {
+      const reader= new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload= (event: any) => {
+        this.headerImage= event.target.result;
+      };
+
+      this.headerImgUpload= event.target.files[0];
+      this.validImgType= true;
+    }
   }
 
   onEditorChanged(event: EditorChangeContent | EditorChangeSelection) {
@@ -87,20 +146,40 @@ export class AddArticleComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.createArticleForm.controls['postedAt'].setValue(transformDateTime(new Date(this.postedAt)).toISODate());
-    this.createArticleForm.controls['content'].setValue(this.contentValue);
-
-    if (!this.articleIdValue) {
-      this.store.dispatch(validateCreateArticle({
-        fields: this.createArticleForm.getRawValue(),
-        isInvalid: this.createArticleForm.invalid
+    if (!this.validImgType) {
+      this.store.dispatch(showDialog({
+        config: {
+          data: {
+            message: 'Ektensi file tidak sesuai dengan file gambar, harus menggunakan ektensi jpg, jpeg atau png',
+            buttonText: {
+              close: 'OK'
+            }
+          }
+        }
       }));
     } else {
-      this.store.dispatch(validateUpdateArticle({
-        articleId: this.articleIdValue,
-        fields: this.createArticleForm.getRawValue(),
-        isInvalid: this.createArticleForm.invalid
-      }));
+      this.postedAt.setValue(transformDateTime(new Date(this.postedAt.value)).toISODate());
+      this.content.setValue(this.contentValue);
+
+      if (this.headerImgUrl.value === null) {
+        this.headerImgUrl.setValue('');
+      }
+
+      const fields= { ...this.createArticleForm.getRawValue() };
+
+      if (!this.articleIdValue) {
+        this.store.dispatch(validateCreateArticle({
+          fields: fields,
+          headerImgUpload: this.headerImgUpload,
+          isInvalid: this.createArticleForm.invalid
+        }));
+      } else {
+        this.store.dispatch(validateUpdateArticle({
+          articleId: this.articleIdValue,
+          fields: fields,
+          isInvalid: this.createArticleForm.invalid
+        }));
+      }
     }
   }
 }

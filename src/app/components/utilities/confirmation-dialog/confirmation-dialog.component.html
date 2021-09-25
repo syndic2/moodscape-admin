@@ -1,9 +1,12 @@
-<div class="p-6">
-  <mat-dialog-content>
-    <span [innerHTML]="data.message"></span>
-  </mat-dialog-content>
-  <mat-dialog-actions class="flex justify-center gap-x-4 mt-4">
-    <button mat-raised-button color="warn" (click)="onConfirm('yes')" tabindex="1">{{ data.buttonText.ok }}</button>
-    <button mat-raised-button color="primary" (click)="onConfirm('no')" tabindex="-1">{{ data.buttonText.cancel }}</button>
-  </mat-dialog-actions>
-</div>
+<mat-dialog-content>
+  <span [innerHTML]="data.message"></span>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-center gap-x-4 mt-4">
+  <button mat-raised-button color="warn" (click)="onConfirm('yes')" tabindex="1">{{ data.buttonText.ok }}</button>
+  <button mat-raised-button (click)="onConfirm('no')" class="bg-green-500 text-white" tabindex="-1">{{ data.buttonText.cancel }}</button>
+</mat-dialog-actions>
+
+<ng-container *ngIf="data.checkBox">
+  <mat-checkbox (change)="onCheck($event)" class="mt-6">{{ data.checkBox.text }}</mat-checkbox>
+</ng-container>

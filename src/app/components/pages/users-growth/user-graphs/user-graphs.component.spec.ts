@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LineChartAreaComponent } from './line-chart-area.component';
+import { UserGraphsComponent } from './user-graphs.component';
 
-describe('LineChartAreaComponent', () => {
-  let component: LineChartAreaComponent;
-  let fixture: ComponentFixture<LineChartAreaComponent>;
+describe('UserGraphsComponent', () => {
+  let component: UserGraphsComponent;
+  let fixture: ComponentFixture<UserGraphsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LineChartAreaComponent ]
+      declarations: [ UserGraphsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LineChartAreaComponent);
+    fixture = TestBed.createComponent(UserGraphsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

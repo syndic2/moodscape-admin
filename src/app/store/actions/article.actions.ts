@@ -12,12 +12,12 @@ export const fetchArticle= createAction(
 
 export const validateCreateArticle= createAction(
   '[Article/API] Validate create article',
-  props<{ fields: {}, isInvalid: boolean }>()
+  props<{ fields: {}, headerImgUpload: File, isInvalid: boolean }>()
 );
 
 export const fetchCreateArticle= createAction(
   '[Article/API] Create new article',
-  props<{ fields: {} }>()
+  props<{ fields: {}, headerImgUpload: File }>()
 );
 
 export const validateUpdateArticle= createAction(
@@ -65,3 +65,5 @@ export const removeArticles= createAction(
   '[Article/STORE] Remove articles',
   props<{ articleIds: number[] }>()
 );
+
+export const clearArticles= createAction('[Articles/STORE] Clear articles state');

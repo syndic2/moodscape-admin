@@ -1,3 +1,16 @@
+export const checkFileType= (files: FileList, extensions: string[]): boolean => {
+  if (!files.length || !files[0]) {
+    return false;
+  }
+
+  const extension= files[0].name.split('.').pop().toLowerCase();
+  if (!extensions.includes(extension)) {
+    return false;
+  }
+
+  return true;
+};
+
 export const filterObjectProps= (object) => {
   let stringfiedObj= JSON.stringify(object, (key, value) => {
     return ['', null].includes(value) || (typeof value === 'object' && (value.length === 0 || Object.keys(value).length === 0)) ? undefined : value;

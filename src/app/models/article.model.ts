@@ -8,4 +8,4 @@ export interface Article {
   headerImg: string;
   content: string;
   url: string;
-}
+};

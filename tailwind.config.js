@@ -1,13 +1,21 @@
 module.exports = {
     prefix: '',
+    darkMode: false, // or 'media' or 'class',
+    important: true,
     purge: {
       content: [
         './src/**/*.{html,ts}',
       ]
     },
-    darkMode: 'class', // or 'media' or 'class'
     theme: {
-      extend: {},
+      extend: {
+        width: {
+          'fit-content': 'fit-content'
+        },
+        height: {
+          'fit-content': 'fit-content'
+        }
+      },
     },
     variants: {
       extend: {},

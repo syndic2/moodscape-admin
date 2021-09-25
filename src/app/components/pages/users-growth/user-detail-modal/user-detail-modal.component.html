@@ -1,0 +1,138 @@
+<div class="flex justify-end">
+  <button mat-icon-button mat-dialog-close color="primary" tabindex="-1">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="w-full">
+  <ng-container *ngIf="!data.isEditMode; else showEditMode">
+    <div class="flex flex-col items-center gap-y-4">
+      <img [src]="data.user.imgUrl" alt="" class="rounded-full">
+      <div class="inline-flex gap-x-2">
+        <label class="text-sm font-semibold italic">Bergabung sejak</label>
+        <span>{{ data.user.joinedAt }}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-flow-row grid-cols-2 gap-4 px-6 py-8">
+      <label class="font-medium">Nama depan</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.firstName }}</span>
+      </div>
+
+      <label class="font-medium">Nama belakang</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.lastName }}</span>
+      </div>
+
+      <label class="font-medium">Jenis kelamin</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.gender | gender }}</span>
+      </div>
+
+      <label class="font-medium">Tanggal lahir</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.dateOfBirth }}</span>
+      </div>
+
+      <label class="font-medium">Email</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.email }}</span>
+      </div>
+
+      <label class="font-medium">Username</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.user.username }}</span>
+      </div>
+
+      <label class="font-medium">Password</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span class="block break-words overflow-hidden w-full">{{ data.user.password }}</span>
+      </div>
+
+      <label class="font-medium">Status</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span [ngClass]="{ 'text-green-500': data.user.isActive, 'text-red-500': !data.user.isActive }" class="block w-full break-words">
+          {{ data.user.isActive ? 'Aktif' : 'Tidak Aktif' }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #showEditMode>
+    <form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()" class="relative">
+      <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+        <mat-spinner class="m-auto"></mat-spinner>
+      </div>
+
+      <div class="flex flex-col gap-y-4 p-6">
+        <div class="inline-flex flex-col justify-center items-center gap-y-4">
+          <img [src]="profileImage" alt="" class="rounded-full w-24">
+          <input type="file" (change)="onSelectFile($event)">
+        </div>
+
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Nama depan</mat-label>
+          <input matInput formControlName="firstName" placeholder="Nama depan">
+          <mat-error *ngIf="firstName.hasError('required')">Nama depan tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Nama belakang</mat-label>
+          <input matInput formControlName="lastName" placeholder="Nama depan">
+          <mat-error *ngIf="lastName.hasError('required')">Nama depan tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Jenis kelamin</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="M">Laki - laki</mat-option>
+            <mat-option value="F">Perempuan</mat-option>
+          </mat-select>
+          <mat-error *ngIf="gender.hasError('required')">Jenis kelamin tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Tanggal lahir</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" class="w-fit-content" placeholder="Tanggal lahir">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="dateOfBirth.hasError('required')">Tanggal lahir tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput formControlName="email" placeholder="Email">
+          <mat-error *ngIf="email.hasError('required')">Email tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Username">
+          <mat-error *ngIf="username.hasError('required')">Username tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput formControlName="password" placeholder="Username">
+          <mat-error *ngIf="password.hasError('required')">Password tidak boleh kosong.</mat-error>
+        </mat-form-field>
+
+        <mat-slide-toggle color="primary" formControlName="isActive">Status aktif</mat-slide-toggle>
+
+        <div class="text-center">
+          <button mat-raised-button color="primary">Simpan</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</mat-dialog-content>
+

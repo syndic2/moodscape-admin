@@ -1,3 +1,5 @@
+import { ComponentType } from '@angular/cdk/portal';
+
 import { MatDialogConfig } from '@angular/material/dialog';
 
 import { createAction, props } from '@ngrx/store';
@@ -9,5 +11,5 @@ export const setIsResetForm= createAction(
 
 export const showDialog= createAction(
   '[APP UI/DIALOG] Show dialog',
-  props<{ config: MatDialogConfig }>()
+  props<{ component?: ComponentType<any>, config: MatDialogConfig }>()
 );

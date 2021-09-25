@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { Article } from 'src/app/models/article.model';
-import { fetchArticles, removeArticlesConfirmation } from 'src/app/store/actions/article.actions';
+import { fetchArticles, removeArticlesConfirmation, clearArticles } from 'src/app/store/actions/article.actions';
 import { getArticles } from 'src/app/store/selectors/article.selectors';
 import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 
@@ -33,7 +33,7 @@ export class ListArticleComponent implements OnInit, OnDestroy {
       if (!res.length) {
         this.loadArticles();
       } else {
-        this.tableDataSource= new MatTableDataSource(res);
+        this.tableDataSource= new MatTableDataSource([...res]);
         this.tableDataSource.sort = this.sort;
         this.tableDataSource.paginator = this.paginator;
       }
@@ -45,12 +45,12 @@ export class ListArticleComponent implements OnInit, OnDestroy {
   }
 
   loadArticles() {
-    this.store.dispatch(fetchArticles());
+    this.store.dispatch(clearArticles());
   }
 
-  search(event: Event) {
-    const title= (event.target as HTMLInputElement).value;
-    this.tableDataSource.filter= title.trim().toLowerCase();
+  onSearch(event: Event) {
+    const field= (event.target as HTMLInputElement).value;
+    this.tableDataSource.filter= field.trim().toLowerCase();
 
     if (this.tableDataSource.paginator) this.tableDataSource.paginator.firstPage();
   }

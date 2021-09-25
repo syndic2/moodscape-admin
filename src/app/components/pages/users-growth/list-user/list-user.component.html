@@ -1,0 +1,88 @@
+<div class="flex flex-col gap-y-4">
+  <div class="flex justify-between items-center gap-x-2">
+    <div class="flex gap-x-2">
+      <span class="font-medium">Total:</span>
+      <span>{{ tableDataSource ? tableDataSource.data.length : 0 }} pengguna</span>
+    </div>
+    <button mat-mini-fab color="primary" (click)="loadUsers()">
+      <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
+    </button>
+  </div>
+
+  <div class="flex justify-center">
+    <mat-form-field class="w-1/2">
+      <mat-label>Cari pengguna</mat-label>
+      <input matInput (input)="onSearch($event)">
+    </mat-form-field>
+  </div>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+
+  <div class="mat-elevation-z8 relative">
+    <div class="absolute z-10 flex w-full h-full bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+      <mat-spinner class="m-auto"></mat-spinner>
+    </div>
+
+    <table class="w-full" mat-table [dataSource]="tableDataSource" matSort>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nama Depan</th>
+        <td mat-cell *matCellDef="let user">{{ user.firstName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nama Belakang</th>
+        <td mat-cell *matCellDef="let user">{{ user.lastName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Jenis Kelamin</th>
+        <td mat-cell *matCellDef="let user">{{ user.gender === 'M' ? 'Laki' : (user.gender === 'F' ? 'Perempuan' : '-') }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateOfBirth">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tanggal Lahir</th>
+        <td mat-cell *matCellDef="let user">{{ user.dateOfBirth }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="joinedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Bergabung sejak</th>
+        <td mat-cell *matCellDef="let user">{{ user.joinedAt }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let user" [ngClass]="{ 'text-green-500': user.isActive, 'text-red-500': !user.isActive }">
+          {{ user.isActive ? 'Aktif' : 'Tidak aktif' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-icon-button color="primary" (click)="onViewEdit(user)">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onViewEdit(user, true)" class="text-green-500">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onRemove(user)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">-Pengguna tidak ditemukan-</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  </div>
+</div>
