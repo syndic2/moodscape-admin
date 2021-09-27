@@ -109,32 +109,50 @@ export class ArticleService {
     );
   }
 
-  updateArticle(articleId, fields: {}): Observable<any> {
+  updateArticle(articleId, fields: {}, headerImgUpload: File): Observable<any> {
     const args= StringifyObject(fields, { singleQuotes: false });
-    const query= gql(`
-      mutation {
-        updateArticle(Id: ${articleId}, fields: ${args}) {
-          updatedArticle {
-            Id,
-            title,
-            shortSummary,
-            author,
-            postedAt,
-            reviewedBy,
-            headerImg,
-            content,
-            urlName,
-            url
-          },
-          response {
-            text,
-            status
+    const operations= {
+      query: gql(`
+        mutation($file: Upload) {
+          updateArticle(Id: ${articleId}, fields: ${args}, headerImgUpload: $file) {
+            updatedArticle {
+              Id,
+              title,
+              shortSummary,
+              author,
+              postedAt,
+              reviewedBy,
+              headerImg,
+              content,
+              urlName,
+              url
+            },
+            response {
+              text,
+              status
+            }
           }
         }
+      `),
+      variables: {
+        file: null
       }
-    `);
+    };
+    const _map= { 
+      file: ['variables.file']
+    };
 
-    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+    const formData= new FormData();
+    formData.append('operations', JSON.stringify(operations))
+    formData.append('map', JSON.stringify(_map));
+    formData.append('file', headerImgUpload ? headerImgUpload : new File([], 'default'));
+
+    return this.http.post(`${environment.apiUrl}`, formData, {
+      headers: {
+        skipRequestHeadersInterceptor: 'true',
+        'Accept': 'application/json'
+      }
+    }).pipe(
       map((res: any) => res.data.updateArticle)
     );
   }

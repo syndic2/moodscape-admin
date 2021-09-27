@@ -20,6 +20,7 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
   public updateUserForm: FormGroup;
   public profileImage: string;
   private imgUpload: File;
+  private isValidImgType: boolean= true;
   private paswordChangesSubscription: Subscription;
   private isPasswordChanged: boolean= false;
 
@@ -105,6 +106,7 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
 
   onSelectFile(event) {
     if (!checkFileType(event.target.files, ['jpg', 'jpeg', 'png'])) {
+      this.isValidImgType= false;
       this.store.dispatch(showDialog({
         config: {
           data: {
@@ -123,22 +125,36 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
       };
 
       this.imgUpload= event.target.files[0];
+      this.isValidImgType= true;
     }
   }
 
   onSubmit() {
-    const fields= { ...this.updateUserForm.value };
-    fields.dateOfBirth= transformDateTime(new Date(fields.dateOfBirth)).toISODate()
+    if (!this.isValidImgType) {
+      this.store.dispatch(showDialog({
+        config: {
+          data: {
+            message: 'Ektensi file tidak sesuai dengan file gambar, harus menggunakan ektensi jpg, jpeg atau png',
+            buttonText: {
+              close: 'OK'
+            }
+          }
+        }
+      }));
+    } else {
+      const fields= { ...this.updateUserForm.value };
+      fields.dateOfBirth= transformDateTime(new Date(fields.dateOfBirth)).toISODate()
 
-    if (!this.isPasswordChanged) {
-      delete fields['password'];
+      if (!this.isPasswordChanged) {
+        delete fields['password'];
+      }
+
+      this.store.dispatch(validateUpdateUser({
+        userId: this.data.user.Id,
+        fields: fields,
+        imgUpload: this.imgUpload,
+        isInvalid: this.updateUserForm.invalid
+      }));
     }
-
-    this.store.dispatch(validateUpdateUser({
-      userId: this.data.user.Id,
-      fields: fields,
-      imgUpload: this.imgUpload,
-      isInvalid: this.updateUserForm.invalid
-    }));
   }
 }

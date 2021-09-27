@@ -2,15 +2,36 @@ import { createReducer, on } from '@ngrx/store';
 
 import { filterArrayByAnotherArray } from 'src/app/utilities/helpers';
 import { UserState } from '../states';
-import { setUsers, setUser, updateUser, removeUsers, clearUsers } from '../actions/user.actions';
+import { 
+  setUsers, 
+  setUsersGroupByGender,
+  setUsersGroupByAge,
+  setUsersGrowthByYear, 
+  setUser, 
+  updateUser, 
+  removeUsers, 
+  clearUsers, 
+  clearUsersGroupByGender,
+  clearUsersGroupByAge,
+  clearUsersGrowthByYear 
+} from '../actions/user.actions';
 
 const initialState: UserState= {
-  users: []
+  users: [],
+  usersGroupByGender: null,
+  usersGroupByAge: null,
+  usersGrowthByYear: []
 };
 
 export const userReducer= createReducer(
   initialState,
   on(setUsers, (state, { users }) => ({ ...state, users: [...users] })),
+
+  on(setUsersGroupByGender, (state, { usersGroupByGender }) => ({ ...state, usersGroupByGender: usersGroupByGender })),
+
+  on(setUsersGroupByAge,  (state, { usersGroupByAge }) => ({ ...state, usersGroupByAge: usersGroupByAge })),
+
+  on(setUsersGrowthByYear, (state, { usersGrowthByYear }) => ({ ...state, usersGrowthByYear: [...usersGrowthByYear] })),
 
   on(setUser, (state, { user }) => ({
     ...state,
@@ -66,5 +87,11 @@ export const userReducer= createReducer(
     }
   }),
 
-  on(clearUsers, (state) => ({ ...state, users: [] }))
+  on(clearUsers, state => ({ ...state, users: [] })),
+
+  on(clearUsersGroupByGender, state => ({ ...state, usersGroupByGender: null })),
+
+  on(clearUsersGroupByAge, state => ({ ...state, usersGroupByAge: null })),
+
+  on(clearUsersGrowthByYear, state => ({ ...state, usersGrowthByYear: [] }))
 );

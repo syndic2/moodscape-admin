@@ -7,7 +7,7 @@
 <mat-dialog-content class="w-full">
   <ng-container *ngIf="!data.isEditMode; else showEditMode">
     <div class="flex flex-col items-center gap-y-4">
-      <img [src]="data.user.imgUrl" alt="" class="rounded-full">
+      <img [src]="data.user.imgUrl" alt="" class="rounded-full object-contain w-32 h-32">
       <div class="inline-flex gap-x-2">
         <label class="text-sm font-semibold italic">Bergabung sejak</label>
         <span>{{ data.user.joinedAt }}</span>
@@ -75,7 +75,7 @@
 
       <div class="flex flex-col gap-y-4 p-6">
         <div class="inline-flex flex-col justify-center items-center gap-y-4">
-          <img [src]="profileImage" alt="" class="rounded-full w-24">
+          <img [src]="profileImage" alt="" class="rounded-full object-contain w-32 h-32">
           <input type="file" (change)="onSelectFile($event)">
         </div>
 

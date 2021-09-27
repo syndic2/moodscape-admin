@@ -1,9 +1,18 @@
 import { createAction, props } from '@ngrx/store';
 
-import { User } from 'src/app/models/user.model';
+import { User, UsersGroupByGender, UsersGroupByAge, UsersGrowthByYear } from 'src/app/models/user.model';
 
 //Fetch API
 export const fetchUsers= createAction('[User/API] Get users');
+
+export const fetchUsersGroupByGender= createAction('[User/API] Get users group by gender');
+
+export const fetchUsersGroupByAge= createAction('[User/API] Get users group by age');
+
+export const fetchUsersGrowthByYear= createAction(
+  '[User/API] Get users growth by yeary', 
+  props<{ startDate: string, endDate: string }>()
+);
 
 export const fetchUser= createAction(
   '[User/API] Get user',
@@ -36,6 +45,21 @@ export const setUsers= createAction(
   props<{ users: User[] }>()
 );
 
+export const setUsersGroupByGender= createAction(
+  '[User/STORE] Set users group by gender',
+  props<{ usersGroupByGender: UsersGroupByGender }>()
+);
+
+export const setUsersGroupByAge= createAction(
+  '[User/STORE] Set users group by age',
+  props<{ usersGroupByAge: UsersGroupByAge }>()
+);
+
+export const setUsersGrowthByYear= createAction(
+  '[User/STORE] Set users growth by year',
+  props<{ usersGrowthByYear: UsersGrowthByYear[] }>()
+);
+
 export const setUser= createAction(
   '[User/STORE] Set user',
   props<{ user: User }>()
@@ -52,3 +76,9 @@ export const removeUsers= createAction(
 );
 
 export const clearUsers= createAction('[User/STORE] Clear users state');
+
+export const clearUsersGroupByGender= createAction('[User/STORE] Clear users group by gender');
+
+export const clearUsersGroupByAge= createAction('[User/STORE] Clear users group by age');
+
+export const clearUsersGrowthByYear= createAction('[User/STORE] Clear users growth by year');

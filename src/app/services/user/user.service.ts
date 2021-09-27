@@ -40,6 +40,90 @@ export class UserService {
     );
   }
 
+  getUsersGroupByGender(): Observable<any> {
+    const query= gql(`
+      query {
+        getUsersGroupByGender {
+          males {
+            Id
+          },
+          females {
+            Id
+          }
+        }
+      }
+    `);
+
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getUsersGroupByGender)
+    );
+  }
+
+  getUsersGroupByAge(): Observable<any> {
+    const query= gql(`
+      query {
+        getUsersGroupByAge {
+          children {
+            group,
+            range,
+            users {
+              Id
+            }
+          },
+          teenager {
+            group,
+            range,
+            users {
+              Id
+            }
+          },
+          adult {
+            group,
+            range,
+            users {
+              Id
+            }
+          },
+          elderly {
+            group,
+            range, 
+            users {
+              Id
+            }
+          },
+          aboveElderly {
+            group,
+            range,
+            users {
+              Id
+            }
+          }
+        }
+      }
+    `);
+
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getUsersGroupByAge)
+    );
+  }
+
+  getUsersGrowthByYear(startDate: string, endDate: string): Observable<any> {
+    const query= gql(`
+      query {
+        getUsersGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
+          month,
+          users {
+            Id
+          }
+        }
+      }
+    `);
+
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getUsersGrowthByYear)
+    );
+  }
+
   getUser(userId: string): Observable<any> {
     const query= gql(`
       query {

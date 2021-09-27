@@ -1,1 +1,76 @@
-<p>user-graphs works!</p>
+<div class="flex justify-between gap-x-4">
+  <div></div>
+  <button mat-mini-fab color="primary" (click)="loadData()">
+      <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
+  </button>
+</div>
+
+<div class="flex flex-col gap-y-10">
+  <div class="inline-flex flex-col gap-y-2">
+    <h1 class="text-lg font-medium my-0">Kelompok Pengguna</h1>
+    <span class="text-sm italic">*Data dibawah ini ditampilkan bedasarkan total keseluruhan pengguna yang terdaftar.</span>
+  </div>
+
+  <div class="flex flex-wrap justify-around items-center gap-4">
+    <mat-card class="mat-elevation-z8">
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+
+      <ng-container *ngIf="usersGroupByGender.length">
+        <div class="relative inline-flex flex-col items-center gap-y-4 p-2">     
+          <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+            <mat-spinner class="m-auto"></mat-spinner>
+          </div>
+          
+          <h3 class="text-lg font-medium">Bedasarkan Jenis Kelamin</h3>
+          <pie-chart [data]="usersGroupByGender" [colorScheme]="{ domain: ['#2A9DF4', '#FF9D5C'] }"></pie-chart>
+        </div>
+      </ng-container>
+    </mat-card>
+  
+    <mat-card class="mat-elevation-z8">
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+
+      <ng-container *ngIf="usersGroupByAge.length">
+        <div class="relative inline-flex flex-col items-center gap-y-4 p-2">
+          <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+            <mat-spinner class="m-auto"></mat-spinner>
+          </div>
+
+          <h3 class="text-lg font-medium">Bedasarkan Kelompok Usia</h3>
+          <pie-chart [data]="usersGroupByAge" [colorScheme]="{ domain: ['#DC143C', '#FF69B4', '#FF6347', '#32CD32', '#1E90FF'] }"></pie-chart>
+        </div>
+      </ng-container>
+    </mat-card>
+  </div>
+</div>
+
+<div class="flex flex-col gap-y-8 mt-16">
+  <div class="inline-flex flex-col gap-y-2">
+    <h1 class="text-lg font-medium my-0">Perkembangan Pengguna</h1>
+    <span class="text-sm italic">*Data dibawah ini menampilkan perkembangan pengguna kurun waktu ke waktu.</span>
+  </div>
+
+  <mat-form-field appearance="fill" class="w-fit-content mx-auto">
+    <mat-label>Pilih tanggal awal dan akhir</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [formGroup]="usersGrowthRangePicker">
+      <input matStartDate placeholder="Tanggal awal" formControlName="startDate">
+      <input matEndDate placeholder="Tanggal akhir" formControlName="endDate">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-card class="mat-elevation-z8 mx-auto">
+    <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+    
+    <ng-container *ngIf="usersGrowthByYear.length">
+      <div class="relative flex p-2">
+        <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+          <mat-spinner class="m-auto"></mat-spinner>
+        </div>
+
+        <bar-chart [data]="usersGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Total Pengguna'"></bar-chart>
+      </div>
+    </ng-container>
+  </mat-card>
+</div>

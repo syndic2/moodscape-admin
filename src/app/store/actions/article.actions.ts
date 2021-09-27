@@ -22,12 +22,12 @@ export const fetchCreateArticle= createAction(
 
 export const validateUpdateArticle= createAction(
   '[Article/API] Validate update article',
-  props<{ articleId: number, fields: {}, isInvalid: boolean }>()
+  props<{ articleId: number, fields: {}, headerImgUpload: File, isInvalid: boolean }>()
 );
 
 export const fetchUpdateArticle= createAction(
   '[Article/API] Update article',
-  props<{ articleId: number, fields: {} }>()
+  props<{ articleId: number, fields: {}, headerImgUpload: File }>()
 );
 
 export const removeArticlesConfirmation= createAction(

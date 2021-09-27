@@ -10,6 +10,21 @@ export const getUsers= createSelector(
   state => state.users
 );
 
+export const getUsersGroupByGender= createSelector(
+  selectUserFeature,
+  state => state.usersGroupByGender
+);
+
+export const getUsersGroupByAge= createSelector(
+  selectUserFeature,
+  state => state.usersGroupByAge
+);
+
+export const getUsersGrowthByYear= createSelector(
+  selectUserFeature,
+  state => state.usersGrowthByYear
+)
+
 export const getUser= (props) => {
   return createSelector(
     getUsers,

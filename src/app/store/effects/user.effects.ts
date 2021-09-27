@@ -9,6 +9,9 @@ import { map, switchMap, exhaustMap, mergeMap } from 'rxjs/operators';
 import { showDialog } from '../actions/application.actions';
 import {
   fetchUsers,
+  fetchUsersGroupByGender,
+  fetchUsersGroupByAge,
+  fetchUsersGrowthByYear,
   fetchUser,
   validateUpdateUser,
   fetchUpdateUser,
@@ -16,9 +19,12 @@ import {
   fetchRemoveUsers,
 
   setUsers,
+  setUsersGroupByGender,
+  setUsersGroupByAge,
+  setUsersGrowthByYear,
   setUser,
   updateUser,
-  removeUsers
+  removeUsers,
 } from '../actions/user.actions';
 import { UserService } from 'src/app/services/user/user.service';
 import { ConfirmationDialogComponent } from 'src/app/components/utilities/confirmation-dialog/confirmation-dialog.component';
@@ -29,6 +35,27 @@ export class UserEffects {
     ofType(fetchUsers),
     exhaustMap(() => this.userService.getUsers().pipe(
       map(res => setUsers({ users: res }))
+    ))
+  ));
+  
+  getUsersGroupByGender= createEffect(() => this.actions$.pipe(
+    ofType(fetchUsersGroupByGender),
+    exhaustMap(() => this.userService.getUsersGroupByGender().pipe(
+      map(res => setUsersGroupByGender({ usersGroupByGender: res }))
+    ))
+  ));
+
+  getUsersGroupByAge$= createEffect(() => this.actions$.pipe(
+    ofType(fetchUsersGroupByAge),
+    exhaustMap(() => this.userService.getUsersGroupByAge().pipe(
+      map(res => setUsersGroupByAge({ usersGroupByAge: res }))
+    ))
+  ));
+  
+  getUsersGrowthByYear$= createEffect(() => this.actions$.pipe(
+    ofType(fetchUsersGrowthByYear),
+    exhaustMap(({ startDate, endDate }) => this.userService.getUsersGrowthByYear(startDate, endDate).pipe(
+      map(res => setUsersGrowthByYear({ usersGrowthByYear: res }))
     ))
   ));
 

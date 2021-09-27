@@ -80,7 +80,7 @@ export class ArticleEffects {
 
   validateUpdateArticle$= createEffect(() => this.actions$.pipe(
     ofType(validateUpdateArticle),
-    switchMap(({ articleId, fields, isInvalid }) => {
+    switchMap(({ articleId, fields, headerImgUpload, isInvalid }) => {
       if (isInvalid) {
         return [
           setIsResetForm({ isReset: false }),
@@ -97,13 +97,13 @@ export class ArticleEffects {
         ];
       }
 
-      return [fetchUpdateArticle({ articleId: articleId, fields: fields })];
+      return [fetchUpdateArticle({ articleId: articleId, headerImgUpload, fields: fields })];
     })
   ));
 
   updateArticle$= createEffect(() => this.actions$.pipe(
     ofType(fetchUpdateArticle),
-    concatMap(({ articleId, fields }) => this.articleService.updateArticle(articleId, fields).pipe(
+    concatMap(({ articleId, fields, headerImgUpload }) => this.articleService.updateArticle(articleId, fields, headerImgUpload).pipe(
       switchMap(res => [
         showDialog({
           config: {

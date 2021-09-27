@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
@@ -20,11 +20,12 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 })
 export class AddArticleComponent implements OnInit, OnDestroy {
   @Input('articleId') articleIdSubject: Subject<number>= new Subject<number>();
+  @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
 
+  private articleIdValue: number;
   public createArticleForm: FormGroup;
   private getArticleSubscription: Subscription;
   private getIsResetFormSubscription: Subscription;
-  private articleIdValue: number;
   private contentValue: string;
   public headerImage: string;
   private headerImgUpload: File;
@@ -44,16 +45,18 @@ export class AddArticleComponent implements OnInit, OnDestroy {
     this.articleIdSubject.subscribe(value => {
       this.articleIdValue= value;
       this.getArticleSubscription= this.store.select(getArticle({ Id: value })).subscribe(res => {
-        const results= { ...res };
+        if (res) {
+          const result= { ...res };
 
-        this.headerImage= results.headerImg;
-        this.createArticleForm.patchValue(results);
-        this.createArticleForm.updateValueAndValidity();
+          this.headerImage= result.headerImg;
+          this.createArticleForm.patchValue(result);
+          this.createArticleForm.updateValueAndValidity();
 
-        if (res.author !== 'admin') {
-          this.author.disable();
-          this.postedAt.disable();
-          this.reviewedBy.disable();
+          if (result.author !== 'admin') {
+            this.author.disable();
+            this.postedAt.disable();
+            this.reviewedBy.disable();
+          }
         }
       });
     });
@@ -111,8 +114,14 @@ export class AddArticleComponent implements OnInit, OnDestroy {
     this.author.setValue('admin');
     this.reviewedBy.setValue('admin');
     this.articleIdValue= null;
-    this.headerImage= '';
     this.headerImgUpload= null;
+    this.headerImage= '';
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value= '';
+    }
+
+    this.validImgType= true;
     this.getArticleSubscription && this.getArticleSubscription.unsubscribe();
   }
 
@@ -146,7 +155,7 @@ export class AddArticleComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (!this.validImgType) {
+    if (!this.validImgType && this.headerImgUpload) {
       this.store.dispatch(showDialog({
         config: {
           data: {
@@ -177,6 +186,7 @@ export class AddArticleComponent implements OnInit, OnDestroy {
         this.store.dispatch(validateUpdateArticle({
           articleId: this.articleIdValue,
           fields: fields,
+          headerImgUpload: this.headerImgUpload,
           isInvalid: this.createArticleForm.invalid
         }));
       }

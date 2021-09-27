@@ -10,7 +10,10 @@ module.exports = {
     theme: {
       extend: {
         width: {
-          'fit-content': 'fit-content'
+          'fit-content': 'fit-content',
+          '28rem': '28rem',
+          '30rem': '30rem',
+          '40rem': '40rem'
         },
         height: {
           'fit-content': 'fit-content'

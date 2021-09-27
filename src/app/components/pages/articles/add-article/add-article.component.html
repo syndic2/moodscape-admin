@@ -8,8 +8,10 @@
   </div>
 
   <div class="flex flex-col items-center gap-y-4">
-    <img [src]="headerImage" alt="" class="border rounded-xl object-contain w-96 h-28">
-    <input type="file" (change)="onSelectFile($event)">
+    <img [src]="headerImage" alt="" class="border rounded-xl object-contain w-96 h-52">
+    <ng-container *ngIf="author.value === 'admin'">
+      <input #fileInput type="file" (change)="onSelectFile($event)">
+    </ng-container>
   </div>
 
   <mat-card class="mat-elevation-z8 w-3/5 mx-auto mt-8">

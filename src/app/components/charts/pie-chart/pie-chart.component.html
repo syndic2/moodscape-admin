@@ -1,0 +1,12 @@
+<ng-container *ngIf="data.length">
+  <ngx-charts-pie-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="data"
+  [gradient]="gradient"
+  [legend]="showLegend"
+  [legendPosition]="legendPosition"
+  [labels]="showLabels"
+  [doughnut]="isDoughnut">
+</ngx-charts-pie-chart>
+</ng-container>

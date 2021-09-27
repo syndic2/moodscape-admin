@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { Article } from 'src/app/models/article.model';
-import { fetchArticles, removeArticlesConfirmation, clearArticles } from 'src/app/store/actions/article.actions';
+import { fetchArticles, removeArticlesConfirmation } from 'src/app/store/actions/article.actions';
 import { getArticles } from 'src/app/store/selectors/article.selectors';
 import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 
@@ -29,14 +29,16 @@ export class ListArticleComponent implements OnInit, OnDestroy {
   constructor(private store: Store, public utilitiesService: UtilitiesService) { }
 
   ngOnInit(): void {
+    this.loadArticles();
     this.getArticlesSubscription= this.store.select(getArticles).subscribe(res => {
       if (!res.length) {
-        this.loadArticles();
+        this.tableDataSource= new MatTableDataSource([]);
       } else {
         this.tableDataSource= new MatTableDataSource([...res]);
-        this.tableDataSource.sort = this.sort;
-        this.tableDataSource.paginator = this.paginator;
       }
+
+      this.tableDataSource.sort = this.sort;
+      this.tableDataSource.paginator = this.paginator;
     });
   }
 
@@ -45,7 +47,7 @@ export class ListArticleComponent implements OnInit, OnDestroy {
   }
 
   loadArticles() {
-    this.store.dispatch(clearArticles());
+    this.store.dispatch(fetchArticles());
   }
 
   onSearch(event: Event) {
