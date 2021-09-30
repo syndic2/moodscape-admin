@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeedbacksAppComponent } from './feedbacks-app.component';
+import { StarRatingComponent } from './star-rating.component';
 
-describe('FeedbacksAppComponent', () => {
-  let component: FeedbacksAppComponent;
-  let fixture: ComponentFixture<FeedbacksAppComponent>;
+describe('StarRatingComponent', () => {
+  let component: StarRatingComponent;
+  let fixture: ComponentFixture<StarRatingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FeedbacksAppComponent ]
+      declarations: [ StarRatingComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FeedbacksAppComponent);
+    fixture = TestBed.createComponent(StarRatingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

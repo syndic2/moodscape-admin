@@ -74,11 +74,3 @@ export const removeUsers= createAction(
   '[User/STORE] Remove users',
   props<{ userIds: string[], isSoftDelete: boolean }>()
 );
-
-export const clearUsers= createAction('[User/STORE] Clear users state');
-
-export const clearUsersGroupByGender= createAction('[User/STORE] Clear users group by gender');
-
-export const clearUsersGroupByAge= createAction('[User/STORE] Clear users group by age');
-
-export const clearUsersGrowthByYear= createAction('[User/STORE] Clear users growth by year');

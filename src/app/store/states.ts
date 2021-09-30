@@ -1,6 +1,7 @@
 import { User, UsersGroupByGender, UsersGroupByAge, UsersGrowthByYear } from '../models/user.model';
 import { PsychologyDisease } from '../models/psychology-disease.model';
 import { Article } from '../models/article.model';
+import { AppFeedback, AppFeedbacksGroupByRating, AppFeedbacksGrowthByYear } from '../models/feedback.model';
 
 export interface ApplicationState {
   readonly isResetForm: boolean
@@ -20,3 +21,16 @@ export interface PsychologyDiseaseState {
 export interface ArticleState {
   readonly articles: Article[]
 };
+
+export interface FeedbackState {
+  /**
+   * Chatbot feedback
+   */
+
+  /**
+   * App feedback
+   */
+  readonly appFeedbacks: AppFeedback[],
+  readonly appFeedbacksGroupByRating: AppFeedbacksGroupByRating,
+  readonly appFeedbackGrowthByYear: AppFeedbacksGrowthByYear[]
+}

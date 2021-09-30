@@ -38,8 +38,8 @@ const routes: Routes = [
         loadChildren: () => import('../feedbacks-chatbot/feedbacks-chatbot.module').then(m => m.FeedbacksChatbotModule)
       },
       {
-        path: 'feedbacks-app',
-        loadChildren: () => import('../feedbacks-app/feedbacks-app.module').then(m => m.FeedbacksAppModule)
+        path: 'app-feedbacks',
+        loadChildren: () => import('../app-feedbacks/app-feedbacks.module').then(m => m.AppFeedbacksModule)
       }
     ]
   }

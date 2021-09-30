@@ -33,13 +33,12 @@ export class ListUserComponent implements OnInit, OnDestroy {
     this.loadUsers();
     this.getUsersSubscription= this.store.select(getUsers).subscribe(res => {
       if (!res.length) {
-        this.tableDataSource= new MatTableDataSource([]);
+        this.loadUsers();
       } else {
         this.tableDataSource= new MatTableDataSource([...res]);
+        this.tableDataSource.sort = this.sort;
+        this.tableDataSource.paginator = this.paginator;
       }
-
-      this.tableDataSource.sort = this.sort;
-      this.tableDataSource.paginator = this.paginator;
     });
   }
 

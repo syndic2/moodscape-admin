@@ -2,5 +2,6 @@ export enum StoreFeatureKeys {
   APPLICATION= 'application',
   USER= 'user',
   PSYCHOLOGY_DISEASE= 'psychology-disease',
-  ARTICLE= 'article'
+  ARTICLE= 'article',
+  FEEDBACK= 'feedback'
 };

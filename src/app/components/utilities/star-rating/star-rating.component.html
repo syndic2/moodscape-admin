@@ -1,0 +1,11 @@
+<div class="flex flex-wrap items-center gap-2">
+  <ng-container *ngFor="let number of maxStarCounter">
+    <ng-container *ngIf="number < rating; else showUnrated">
+      <mat-icon class="text-yellow-500">star</mat-icon>
+    </ng-container>
+
+    <ng-template #showUnrated>
+      <mat-icon class="text-yellow-500">star_border</mat-icon>
+    </ng-template>
+  </ng-container>
+  </div>

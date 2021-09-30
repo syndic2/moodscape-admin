@@ -65,5 +65,3 @@ export const removeArticles= createAction(
   '[Article/STORE] Remove articles',
   props<{ articleIds: number[] }>()
 );
-
-export const clearArticles= createAction('[Articles/STORE] Clear articles state');

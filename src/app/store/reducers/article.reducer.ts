@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 
 import { ArticleState } from '../states';
 import { filterArrayByAnotherArray } from 'src/app/utilities/helpers';
-import { setArticles, setArticle, createArticle, updateArticle, removeArticles, clearArticles } from '../actions/article.actions';
+import { setArticles, setArticle, createArticle, updateArticle, removeArticles } from '../actions/article.actions';
 
 const initialState: ArticleState= {
   articles: []
@@ -49,7 +49,5 @@ export const articleReducer= createReducer(
         { field1: 'Id' }
       )
     ]
-  })),
-
-  on(clearArticles, (state) => ({ ...state, articles: [] }))
+  }))
 );

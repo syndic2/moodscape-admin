@@ -9,11 +9,7 @@ import {
   setUsersGrowthByYear, 
   setUser, 
   updateUser, 
-  removeUsers, 
-  clearUsers, 
-  clearUsersGroupByGender,
-  clearUsersGroupByAge,
-  clearUsersGrowthByYear 
+  removeUsers
 } from '../actions/user.actions';
 
 const initialState: UserState= {
@@ -85,13 +81,5 @@ export const userReducer= createReducer(
         )
       ]
     }
-  }),
-
-  on(clearUsers, state => ({ ...state, users: [] })),
-
-  on(clearUsersGroupByGender, state => ({ ...state, usersGroupByGender: null })),
-
-  on(clearUsersGroupByAge, state => ({ ...state, usersGroupByAge: null })),
-
-  on(clearUsersGrowthByYear, state => ({ ...state, usersGrowthByYear: [] }))
+  })
 );

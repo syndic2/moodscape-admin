@@ -32,13 +32,12 @@ export class ListArticleComponent implements OnInit, OnDestroy {
     this.loadArticles();
     this.getArticlesSubscription= this.store.select(getArticles).subscribe(res => {
       if (!res.length) {
-        this.tableDataSource= new MatTableDataSource([]);
+        this.loadArticles();
       } else {
         this.tableDataSource= new MatTableDataSource([...res]);
+        this.tableDataSource.sort = this.sort;
+        this.tableDataSource.paginator = this.paginator;
       }
-
-      this.tableDataSource.sort = this.sort;
-      this.tableDataSource.paginator = this.paginator;
     });
   }
 
