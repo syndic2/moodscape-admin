@@ -1,6 +1,7 @@
 import { ActionReducer, ActionReducerMap, INIT, MetaReducer } from '@ngrx/store';
 
 import { StoreFeatureKeys } from './feature-keys';
+import { logout } from './actions/application.actions';
 import { applicationReducer } from './reducers/application.reducer';
 import { userReducer } from './reducers/user.reducer';
 import { articleReducer } from './reducers/article.reducer';
@@ -24,9 +25,9 @@ const debugMeta= (reducer: ActionReducer<any>): ActionReducer<any> => {
 
 const logoutMeta= (reducer: ActionReducer<any>): ActionReducer<any> => {
   return (state, action) => {
-    //if (action.type === logout.type) {
-    //  return reducer(undefined, { type: INIT });
-    //}
+    if (action.type === logout.type) {
+      return reducer(undefined, { type: INIT });
+    }
 
     return reducer(state, action);
   }

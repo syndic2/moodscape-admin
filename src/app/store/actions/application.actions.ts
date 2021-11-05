@@ -13,3 +13,5 @@ export const showDialog= createAction(
   '[APP UI/DIALOG] Show dialog',
   props<{ component?: ComponentType<any>, config: MatDialogConfig }>()
 );
+
+export const logout= createAction('[APP/STORE] Logout and clear store');

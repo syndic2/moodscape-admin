@@ -7,10 +7,10 @@
 <mat-dialog-content class="w-full">
   <ng-container *ngIf="!data.isEditMode; else showEditMode">
     <div class="flex flex-col items-center gap-y-4">
-      <img [src]="data.user.imgUrl" alt="" class="rounded-full object-contain w-32 h-32">
+      <!--<img [src]="data.user.imgUrl" alt="" class="rounded-full object-contain w-32 h-32">-->
       <div class="inline-flex gap-x-2">
-        <label class="text-sm font-semibold italic">Bergabung sejak</label>
-        <span>{{ data.user.joinedAt }}</span>
+        <label class="font-medium">Bergabung sejak</label>
+        <span class="font-semibold">{{ data.user.joinedAt }}</span>
       </div>
     </div>
 

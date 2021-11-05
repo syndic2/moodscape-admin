@@ -1,1 +1,28 @@
-<p>login works!</p>
+<div id="login-page" class="flex justify-center items-center h-full">
+  <mat-card class="mat-elevation-z8 flex flex-col gap-y-2 w-1/4">
+    <h1 class="text-xl font-medium text-center">Masuk</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="rounded-lg flex flex-col gap-y-2 p-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Email atau nama pengguna</mat-label>
+        <input type="text" matInput [formControl]="emailOrUsername" placeholder="Email atau nama pengguna anda">
+        <!--<mat-error *ngIf="emailOrUsername.hasError('email') && !emailOrUsername.hasError('required')">
+          Format email tidak valid
+        </mat-error>-->
+        <mat-error *ngIf="emailOrUsername.hasError('required')">
+          Email tidak boleh kosong
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput [formControl]="password" placeholder="Password anda">
+        <mat-error *ngIf="password.hasError('required')">
+          Email tidak boleh kosong
+        </mat-error>
+      </mat-form-field>
+
+      <button type="submit" mat-raised-button color="primary" class="mt-2">Masuk</button>
+    </form>
+  </mat-card>
+</div>
