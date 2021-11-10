@@ -99,3 +99,59 @@ export const transformDateTime= (dateTime: Date) => {
 
   return transformed;
 };
+
+export const hexToRgb= (hexString: string) => {
+  if (hexString.length != 6){ 
+    //throw "Only six-digit hex colors are allowed.";
+    return [];
+  }
+
+  const aRgbHex= hexString.match(/.{1,2}/g);
+  const aRgb= [
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16)
+  ];
+
+  return aRgb;
+};
+
+const colorToHex= (color: number) => {
+  let hex= color.toString(16);
+
+  return hex.length === 1 ? '0'+hex : hex;
+};
+
+export const rgbToHex= (rgb: number[]) => {
+  if (rgb.length > 3) {
+    return undefined;
+  }
+
+  return '#'+colorToHex(rgb[0])+colorToHex(rgb[1])+colorToHex(rgb[2]);
+};
+
+export const getColorShades= (rgb: number[], percent: number) => {
+  if (rgb.length > 3) {
+    return [];
+  }
+
+  //let shades= [];
+
+  rgb[0]= Math.floor(rgb[0]*(100+percent)/100);
+  rgb[1]= Math.floor(rgb[1]*(100+percent)/100);
+  rgb[2]= Math.floor(rgb[2]*(100+percent)/100);
+
+  rgb[0]= rgb[0] < 255 ? rgb[0] : 255;
+  rgb[1]= rgb[1] < 255 ? rgb[1] : 255;
+  rgb[2]= rgb[2] < 255 ? rgb[2] : 255;
+  
+  //for (let i = startContrast; i <= endContrast; i++) {
+  //  shades.push([
+  //    Math.floor(i*rgb[0]/10), 
+  //    Math.floor(i*rgb[1]/10), 
+  //    Math.floor(i*rgb[2]/10)
+  //  ]);
+  //}
+
+  return rgb;
+};

@@ -1,0 +1,40 @@
+<mat-card class="mat-elevation-z8 mx-auto p-8">
+  <form [formGroup]="createThemeForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-1/4">
+      <mat-label>Nama</mat-label>
+      <input matInput formControlName="name" placeholder="Nama">
+      <mat-error *ngIf="name.hasError('required')">Nama tidak boleh kosong.</mat-error>
+    </mat-form-field>
+
+    <div formGroupName="colors" class="grid grid-flow-col gap-10 mt-4">
+      <div class="flex flex-col gap-y-2">
+        <mat-label class="font-medium">Warna Primary</mat-label>
+        <color-sketch 
+          [color]="primaryColor.value" 
+          (onChange)="onPrimaryColorChange($event)" 
+          formControlName="primary" 
+          ngDefaultControl>
+        </color-sketch>
+      </div>
+
+      <div class="flex flex-col gap-y-2">
+        <mat-label class="font-medium">Warna Contrast</mat-label>
+        <color-sketch [color]="contrastColor.value" (onChange)="onContrastColorChange($event)" formControlName="primaryContrast" ngDefaultControl></color-sketch>
+      </div>
+
+      <div class="flex flex-col gap-y-2">
+        <mat-label class="font-medium">Warna Shade</mat-label>
+        <color-sketch [color]="shadeColor.value" (onChange)="onShadeColorChange($event)" formControlName="primaryShade" ngDefaultControl></color-sketch>
+      </div>
+      
+      <div class="flex flex-col gap-y-2">
+        <mat-label class="font-medium">Warna Tint</mat-label>
+        <color-sketch [color]="tintColor.value" (onChange)="onTintColorChange($event)" formControlName="primaryTint" ngDefaultControl></color-sketch>
+      </div>
+    </div>
+
+    <mat-slide-toggle color="primary" formControlName="isActive" class="block mt-6">Status aktif</mat-slide-toggle>
+
+    <button mat-raised-button color="primary" class="block mx-auto mt-6">Tambah</button>
+  </form>
+</mat-card>

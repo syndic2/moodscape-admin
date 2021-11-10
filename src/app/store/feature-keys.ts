@@ -3,5 +3,6 @@ export enum StoreFeatureKeys {
   USER= 'user',
   PSYCHOLOGY_DISEASE= 'psychology-disease',
   ARTICLE= 'article',
+  THEME= 'theme',
   FEEDBACK= 'feedback'
 };

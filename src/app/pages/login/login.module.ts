@@ -24,8 +24,8 @@ const Materials= [
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    ...Materials,
     LoginRoutingModule,
-    Materials
   ]
 })
 export class LoginModule { }

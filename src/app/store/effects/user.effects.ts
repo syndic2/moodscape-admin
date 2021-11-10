@@ -66,33 +66,6 @@ export class UserEffects {
     ))
   ));
 
-  removeUsersConfirmation$= createEffect(() => this.actions$.pipe(
-    ofType(removeUsersConfirmation),
-    exhaustMap(({ userIds }) => {
-      const dialogRef= this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          message: 'Apa anda yakin ingin menghapus pengguna ini?',
-          buttonText: {
-            ok: 'Ya',
-            cancel: 'Tidak'
-          },
-          checkBox: {
-            text: 'Hapus kasar'
-          }
-        }
-      });
-
-      return dialogRef.afterClosed().pipe(
-        map(data => ({ dialogData: data, userIds: userIds }))
-      )
-    }),
-    map(res => {
-      if (res.dialogData.confirmation === 'yes') {
-        this.store.dispatch(fetchRemoveUsers({ userIds: res.userIds, isSoftDelete: !res.dialogData.checkBoxChecked ? true : false }))
-      }
-    })
-  ), { dispatch: false });
-
   validateUserUpdate$= createEffect(() => this.actions$.pipe(
     ofType(validateUpdateUser),
     map(({ userId, fields, imgUpload, isInvalid }) => {
@@ -131,6 +104,33 @@ export class UserEffects {
       ])
     ))
   ));
+    
+  removeUsersConfirmation$= createEffect(() => this.actions$.pipe(
+    ofType(removeUsersConfirmation),
+    exhaustMap(({ userIds }) => {
+      const dialogRef= this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: 'Apa anda yakin ingin menghapus pengguna ini?',
+          buttonText: {
+            ok: 'Ya',
+            cancel: 'Tidak'
+          },
+          checkBox: {
+            text: 'Hapus kasar'
+          }
+        }
+      });
+
+      return dialogRef.afterClosed().pipe(
+        map(data => ({ dialogData: data, userIds: userIds }))
+      )
+    }),
+    map(res => {
+      if (res.dialogData.confirmation === 'yes') {
+        this.store.dispatch(fetchRemoveUsers({ userIds: res.userIds, isSoftDelete: !res.dialogData.checkBoxChecked ? true : false }))
+      }
+    })
+  ), { dispatch: false });
 
   removeUsers$= createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveUsers),

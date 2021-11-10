@@ -1,0 +1,103 @@
+<div class="flex justify-end">
+  <button mat-icon-button mat-dialog-close tabindex="-1">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="w-full">
+  <ng-container *ngIf="!data.isEditMode; else showEditMode">
+    <div class="grid grid-flow-row grid-cols-2 items-center gap-4 px-6 py-8">
+      <label class="font-medium">Nama</label>
+      <div class="flex gap-x-4">
+        <span>:</span>
+        <span>{{ data.theme.name }}</span>
+      </div>
+      
+      <div class="col-span-2 mt-4">
+        <h3 class="text-lg my-0">Warna</h3>
+      </div>
+
+      <label class="font-medium">Primary:</label>
+      <div class="flex items-center gap-x-4">
+        <span>:</span>
+        <div 
+          class="rounded-full w-7 h-7" 
+          [style.background]="data.theme.colors.primary"
+          style="border: 1px solid black;">
+        </div>
+        <span>{{ data.theme.colors.primary }}</span>
+      </div>
+      
+      <label class="font-medium">Primary Contrast:</label>
+      <div class="flex items-center gap-x-4">
+        <span>:</span>
+        <div 
+          class="rounded-full w-7 h-7" 
+          [style.background]="data.theme.colors.primaryContrast" 
+          style="border: 1px solid black;">
+        </div>
+        <span>{{ data.theme.colors.primaryContrast }}</span>
+      </div>
+
+      <label class="font-medium">Primary Shade:</label>
+      <div class="flex items-center gap-x-4">
+        <span>:</span>
+        <div 
+          class="rounded-full w-7 h-7" 
+          [style.background]="data.theme.colors.primaryShade"
+          style="border: 1px solid black;">
+        </div>
+        <span>{{ data.theme.colors.primaryShade }}</span>
+      </div>
+
+      <label class="font-medium">Primary Tint:</label>
+      <div class="flex items-center gap-x-4">
+        <span>:</span>
+        <div 
+          class="rounded-full w-7 h-7" 
+          [style.background]="data.theme.colors.primaryTint"
+          style="border: 1px solid black;">
+        </div>
+        <span>{{ data.theme.colors.primaryTint }}</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #showEditMode>
+    <form [formGroup]="updateThemeForm" (ngSubmit)="onSubmit()">
+      <div class="p-6">
+        <mat-form-field class="w-1/4">
+          <mat-label>Nama</mat-label>
+          <input matInput formControlName="name" placeholder="Nama">
+          <mat-error *ngIf="name.hasError('required')">Nama tidak boleh kosong.</mat-error>
+        </mat-form-field>
+        
+        <div formGroupName="colors" class="grid grid-flow-col gap-10 mt-4">
+          <div class="flex flex-col gap-y-2">
+            <mat-label class="font-medium">Warna Primary</mat-label>
+            <color-sketch [color]="primaryColor.value" (onChange)="onPrimaryColorChange($event)" formControlName="primary" ngDefaultControl></color-sketch>
+          </div>
+
+          <div class="flex flex-col gap-y-2">
+            <mat-label class="font-medium">Warna Contrast</mat-label>
+            <color-sketch [color]="contrastColor.value" (onChange)="onContrastColorChange($event)" formControlName="primaryContrast" ngDefaultControl></color-sketch>
+          </div>
+
+          <div class="flex flex-col gap-y-2">
+            <mat-label class="font-medium">Warna Shade</mat-label>
+            <color-sketch [color]="shadeColor.value" (onChange)="onShadeColorChange($event)" formControlName="primaryShade" ngDefaultControl></color-sketch>
+          </div>
+          
+          <div class="flex flex-col gap-y-2">
+            <mat-label class="font-medium">Warna Tint</mat-label>
+            <color-sketch [color]="tintColor.value" (onChange)="onTintColorChange($event)" formControlName="primaryTint" ngDefaultControl></color-sketch>
+          </div>
+        </div>
+
+        <mat-slide-toggle color="primary" formControlName="isActive" class="block mt-6">Status aktif</mat-slide-toggle>
+
+        <button mat-raised-button color="primary" class="block mx-auto mt-6">Simpan</button>
+      </div>
+    </form>
+  </ng-template>
+</mat-dialog-content>

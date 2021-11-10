@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,6 +40,7 @@ const Materials= [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     StoreModule.forRoot(
@@ -60,7 +61,7 @@ const Materials= [
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     ...Materials,
     DialogModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
   ],
   providers: [
     {

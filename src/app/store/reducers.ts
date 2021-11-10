@@ -5,12 +5,14 @@ import { logout } from './actions/application.actions';
 import { applicationReducer } from './reducers/application.reducer';
 import { userReducer } from './reducers/user.reducer';
 import { articleReducer } from './reducers/article.reducer';
+import { themeReducer } from './reducers/theme.reducer';
 import { feedbackReducer } from './reducers/feedback.reducer';
 
 export const reducers: ActionReducerMap<any>= {
   [StoreFeatureKeys.APPLICATION]: applicationReducer,
   [StoreFeatureKeys.USER]: userReducer,
   [StoreFeatureKeys.ARTICLE]: articleReducer,
+  [StoreFeatureKeys.THEME]: themeReducer,
   [StoreFeatureKeys.FEEDBACK]: feedbackReducer
 };
 

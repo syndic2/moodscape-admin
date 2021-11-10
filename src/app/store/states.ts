@@ -1,6 +1,7 @@
 import { User, UsersGroupByGender, UsersGroupByAge, UsersGrowthByYear } from '../models/user.model';
 import { PsychologyDisease } from '../models/psychology-disease.model';
 import { Article } from '../models/article.model';
+import { Theme } from '../models/theme.model';
 import { AppFeedback, AppFeedbacksGroupByRating, AppFeedbacksGrowthByYear } from '../models/feedback.model';
 
 export interface ApplicationState {
@@ -22,6 +23,10 @@ export interface ArticleState {
   readonly articles: Article[]
 };
 
+export interface ThemeState {
+  readonly themes: Theme[]
+};
+
 export interface FeedbackState {
   /**
    * Chatbot feedback
@@ -33,4 +38,4 @@ export interface FeedbackState {
   readonly appFeedbacks: AppFeedback[],
   readonly appFeedbacksGroupByRating: AppFeedbacksGroupByRating,
   readonly appFeedbackGrowthByYear: AppFeedbacksGrowthByYear[]
-}
+};
