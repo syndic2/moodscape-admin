@@ -26,7 +26,7 @@ import { AppComponent } from './app.component';
 import { DialogModule } from './components/utilities/dialog/dialog.module';
 import { ConfirmationDialogModule } from './components/utilities/confirmation-dialog/confirmation-dialog.module';
 
-const Materials= [
+const Materials = [
   MatDialogModule,
   MatSelectModule,
   MatNativeDateModule,

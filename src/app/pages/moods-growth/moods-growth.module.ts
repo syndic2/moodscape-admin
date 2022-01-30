@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MoodsGrowthRoutingModule } from './moods-growth-routing.module';
 import { MoodsGrowthComponent } from './moods-growth.component';
+import { MoodGraphsModule } from 'src/app/components/pages/moods-growth/mood-graphs/mood-graphs.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { MoodsGrowthComponent } from './moods-growth.component';
   ],
   imports: [
     CommonModule,
-    MoodsGrowthRoutingModule
+    MoodsGrowthRoutingModule,
+    MoodGraphsModule
   ]
 })
 export class MoodsGrowthModule { }

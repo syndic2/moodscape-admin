@@ -1,0 +1,53 @@
+<div class="flex justify-between gap-x-4">
+  <div></div>
+  <button mat-mini-fab color="primary" (click)="loadData()">
+    <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
+  </button>
+</div>
+
+<div class="flex flex-col gap-y-10">
+  <div class="inline-flex flex-col gap-y-2">
+    <h1 class="text-lg font-medium my-0">Perkembangan Mood Pengguna</h1>
+    <span class="text-sm italic">*Data dibawah ini menampilkan perkembangan data mood pengguna secara keseluruhan dalam
+      kurun waktu ke waktu.</span>
+  </div>
+
+  <div class="mx-auto">
+    <mat-card class="mat-elevation-z8">
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+
+      <h3 class="text-sm font-medium text-center">Total Mood Pengguna</h3>
+      <ng-container *ngIf="totalMoodGroupByType.length">
+        <div class="relative inline-flex flex-col items-center gap-y-4 p-2">
+          <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+            <mat-spinner class="m-auto"></mat-spinner>
+          </div>
+
+
+          <pie-chart [data]="totalMoodGroupByType" [colorScheme]="{ domain: moodColorSchemes }">
+          </pie-chart>
+        </div>
+      </ng-container>
+    </mat-card>
+  </div>
+
+  <div class="flex flex-col gap-y-2 mt-14">
+    <mat-form-field appearance="fill" class="w-fit-content mx-auto">
+      <mat-label>Pilih tanggal awal dan akhir</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="moodsGrowthRangePicker">
+        <input matStartDate placeholder="Tanggal awal" formControlName="startDate">
+        <input matEndDate placeholder="Tanggal akhir" formControlName="endDate">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-card class="mat-elevation-z8 mx-auto">
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+
+      <h3 class="text-sm font-medium text-center">Rata-rata Mood Pengguna Setiap Bulan</h3>
+      <bar-chart [data]="moodsGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Mood Pengguna'"
+        [customColors]="moodsGrowthByYearCustomColors"></bar-chart>
+    </mat-card>
+  </div>
+</div>

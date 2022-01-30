@@ -1,14 +1,15 @@
 <div class="flex justify-between gap-x-4">
   <div></div>
   <button mat-mini-fab color="primary" (click)="loadData()">
-      <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
+    <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
   </button>
 </div>
 
 <div class="flex flex-col gap-y-10">
   <div class="inline-flex flex-col gap-y-2">
     <h1 class="text-lg font-medium my-0">Kelompok Pengguna</h1>
-    <span class="text-sm italic">*Data dibawah ini ditampilkan bedasarkan total keseluruhan pengguna yang terdaftar.</span>
+    <span class="text-sm italic">*Data dibawah ini ditampilkan bedasarkan total keseluruhan pengguna yang
+      terdaftar.</span>
   </div>
 
   <div class="flex flex-wrap justify-around items-center gap-4">
@@ -16,17 +17,17 @@
       <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
 
       <ng-container *ngIf="usersGroupByGender.length">
-        <div class="relative inline-flex flex-col items-center gap-y-4 p-2">     
+        <div class="relative inline-flex flex-col items-center gap-y-4 p-2">
           <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
             <mat-spinner class="m-auto"></mat-spinner>
           </div>
-          
+
           <h3 class="text-lg font-medium">Bedasarkan Jenis Kelamin</h3>
           <pie-chart [data]="usersGroupByGender" [colorScheme]="{ domain: ['#2A9DF4', '#FF9D5C'] }"></pie-chart>
         </div>
       </ng-container>
     </mat-card>
-  
+
     <mat-card class="mat-elevation-z8">
       <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
 
@@ -37,7 +38,8 @@
           </div>
 
           <h3 class="text-lg font-medium">Bedasarkan Kelompok Usia</h3>
-          <pie-chart [data]="usersGroupByAge" [colorScheme]="{ domain: ['#DC143C', '#FF69B4', '#FF6347', '#32CD32', '#1E90FF'] }"></pie-chart>
+          <pie-chart [data]="usersGroupByAge"
+            [colorScheme]="{ domain: ['#DC143C', '#FF69B4', '#FF6347', '#32CD32', '#1E90FF'] }"></pie-chart>
         </div>
       </ng-container>
     </mat-card>
@@ -62,7 +64,7 @@
 
   <mat-card class="mat-elevation-z8 mx-auto">
     <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
-    
+
     <ng-container *ngIf="usersGrowthByYear.length">
       <div class="relative flex p-2">
         <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">

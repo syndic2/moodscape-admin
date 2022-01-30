@@ -24,49 +24,49 @@ import {
   setUsersGrowthByYear,
   setUser,
   updateUser,
-  removeUsers,
+  removeUsers
 } from '../actions/user.actions';
 import { UserService } from 'src/app/services/user/user.service';
 import { ConfirmationDialogComponent } from 'src/app/components/utilities/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable()
 export class UserEffects {
-  getUsers$= createEffect(() => this.actions$.pipe(
+  getUsers$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUsers),
     exhaustMap(() => this.userService.getUsers().pipe(
       map(res => setUsers({ users: res }))
     ))
   ));
-  
-  getUsersGroupByGender= createEffect(() => this.actions$.pipe(
+
+  getUsersGroupByGender = createEffect(() => this.actions$.pipe(
     ofType(fetchUsersGroupByGender),
     exhaustMap(() => this.userService.getUsersGroupByGender().pipe(
       map(res => setUsersGroupByGender({ usersGroupByGender: res }))
     ))
   ));
 
-  getUsersGroupByAge$= createEffect(() => this.actions$.pipe(
+  getUsersGroupByAge$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUsersGroupByAge),
     exhaustMap(() => this.userService.getUsersGroupByAge().pipe(
       map(res => setUsersGroupByAge({ usersGroupByAge: res }))
     ))
   ));
-  
-  getUsersGrowthByYear$= createEffect(() => this.actions$.pipe(
+
+  getUsersGrowthByYear$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUsersGrowthByYear),
     exhaustMap(({ startDate, endDate }) => this.userService.getUsersGrowthByYear(startDate, endDate).pipe(
       map(res => setUsersGrowthByYear({ usersGrowthByYear: res }))
     ))
   ));
 
-  getUser$= createEffect(() => this.actions$.pipe(
+  getUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUser),
     exhaustMap(({ userId }) => this.userService.getUser(userId).pipe(
       map(res => setUser({ user: res }))
     ))
   ));
 
-  validateUserUpdate$= createEffect(() => this.actions$.pipe(
+  validateUserUpdate$ = createEffect(() => this.actions$.pipe(
     ofType(validateUpdateUser),
     map(({ userId, fields, imgUpload, isInvalid }) => {
       if (isInvalid) {
@@ -86,7 +86,7 @@ export class UserEffects {
     })
   ));
 
-  updateUser$= createEffect(() => this.actions$.pipe(
+  updateUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUpdateUser),
     exhaustMap(({ userId, fields, imgUpload }) => this.userService.updateUser(userId, fields, imgUpload).pipe(
       switchMap(res => [
@@ -104,11 +104,11 @@ export class UserEffects {
       ])
     ))
   ));
-    
-  removeUsersConfirmation$= createEffect(() => this.actions$.pipe(
+
+  removeUsersConfirmation$ = createEffect(() => this.actions$.pipe(
     ofType(removeUsersConfirmation),
     exhaustMap(({ userIds }) => {
-      const dialogRef= this.dialog.open(ConfirmationDialogComponent, {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           message: 'Apa anda yakin ingin menghapus pengguna ini?',
           buttonText: {
@@ -132,12 +132,12 @@ export class UserEffects {
     })
   ), { dispatch: false });
 
-  removeUsers$= createEffect(() => this.actions$.pipe(
+  removeUsers$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveUsers),
     mergeMap(({ userIds, isSoftDelete }) => this.userService.removeUsers(userIds, isSoftDelete).pipe(
       map(res => removeUsers({ userIds: res.removedUsers, isSoftDelete: isSoftDelete }))
     ))
   ));
 
-  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private userService: UserService) {}
+  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private userService: UserService) { }
 }

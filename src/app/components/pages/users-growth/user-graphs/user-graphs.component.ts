@@ -16,9 +16,9 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 })
 export class UserGraphsComponent implements OnInit, OnDestroy {
   public usersGrowthRangePicker: FormGroup;
-  public usersGroupByGender: any[]= [];
-  public usersGroupByAge: any[]= [];
-  public usersGrowthByYear: any[]= [];
+  public usersGroupByGender: any[] = [];
+  public usersGroupByAge: any[] = [];
+  public usersGrowthByYear: any[] = [];
   private getUsersGroupByGenderSubscription: Subscription;
   private getUsersGroupByAgeSubscription: Subscription;
   private getUsersGrowthByYearSubscription: Subscription;
@@ -28,7 +28,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.intializeUsersGrowthRangePicker()
     this.loadData();
-    this.processingData();;
+    this.processingData();
   }
 
   ngOnDestroy() {
@@ -46,19 +46,19 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   }
 
   intializeUsersGrowthRangePicker() {
-    this.usersGrowthRangePicker= new FormGroup({
+    this.usersGrowthRangePicker = new FormGroup({
       startDate: new FormControl(),
       endDate: new FormControl()
     });
 
-    const initialStartDate= new Date();
-    initialStartDate.setFullYear(initialStartDate.getFullYear()-1);
+    const initialStartDate = new Date();
+    initialStartDate.setFullYear(initialStartDate.getFullYear() - 1);
     this.startDate.setValue(initialStartDate);
     this.endDate.setValue(new Date());
 
     this.endDate.valueChanges.subscribe(value => {
       if (value) {
-        this.store.dispatch(fetchUsersGrowthByYear({ 
+        this.store.dispatch(fetchUsersGrowthByYear({
           startDate: transformDateTime(this.startDate.value).toISODate(),
           endDate: transformDateTime(value).toISODate()
         }));
@@ -69,27 +69,27 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   loadData() {
     this.store.dispatch(fetchUsersGroupByGender());
     this.store.dispatch(fetchUsersGroupByAge());
-    this.store.dispatch(fetchUsersGrowthByYear({ 
-      startDate: transformDateTime(this.startDate.value).toISODate(), 
-      endDate: transformDateTime(this.endDate.value).toISODate() 
+    this.store.dispatch(fetchUsersGrowthByYear({
+      startDate: transformDateTime(this.startDate.value).toISODate(),
+      endDate: transformDateTime(this.endDate.value).toISODate()
     }));
   }
 
   processingData() {
-    this.getUsersGroupByGenderSubscription= this.store.select(getUsersGroupByGender).subscribe(res => {
+    this.getUsersGroupByGenderSubscription = this.store.select(getUsersGroupByGender).subscribe(res => {
       if (!res) {
-        this.usersGroupByGender= [];
+        this.usersGroupByGender = [];
       } else {
-        this.usersGroupByGender= [
+        this.usersGroupByGender = [
           { name: "Laki-laki", value: res.males.length },
           { name: "Perempuan", value: res.females.length }
         ];
       }
     });
 
-    this.getUsersGroupByAgeSubscription= this.store.select(getUsersGroupByAge).subscribe(res => {
+    this.getUsersGroupByAgeSubscription = this.store.select(getUsersGroupByAge).subscribe(res => {
       if (!res) {
-        this.usersGroupByAge= [];
+        this.usersGroupByAge = [];
       } else {
         Object.entries(res).forEach(([key, value]) => {
           this.usersGroupByAge.push({
@@ -100,12 +100,12 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.getUsersGrowthByYearSubscription= this.store.select(getUsersGrowthByYear).subscribe(res => {
+    this.getUsersGrowthByYearSubscription = this.store.select(getUsersGrowthByYear).subscribe(res => {
       if (!res.length) {
-        this.usersGrowthByYear= [];
+        this.usersGrowthByYear = [];
       } else {
-        this.usersGrowthByYear= [...res].map((object, index) => ({ name: object.month, value: object.users.length }));
+        this.usersGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.users.length }));
       }
-    }); 
+    });
   }
 }
