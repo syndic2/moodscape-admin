@@ -15,7 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UserDetailModalComponent } from './user-detail-modal.component';
 import { GenderPipe } from 'src/app/pipes/gender/gender.pipe';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatButtonModule,
   MatDialogModule,
@@ -36,4 +36,8 @@ const Materials= [
   ],
   exports: [UserDetailModalComponent]
 })
-export class UserDetailModalModule { }
+export class UserDetailModalModule {
+  static getComponent(): typeof UserDetailModalComponent {
+    return UserDetailModalComponent;
+  }
+}

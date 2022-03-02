@@ -8,7 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AppFeedbackDetailModalComponent } from './app-feedback-detail-modal.component';
 import { StarRatingModule } from 'src/app/components/utilities/star-rating/star-rating.module';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatButtonModule,
   MatDialogModule
@@ -23,4 +23,8 @@ const Materials= [
   ],
   exports: [AppFeedbackDetailModalComponent]
 })
-export class AppFeedbackDetailModalModule { }
+export class AppFeedbackDetailModalModule {
+  static getComponent(): typeof AppFeedbackDetailModalComponent {
+    return AppFeedbackDetailModalComponent;
+  }
+}

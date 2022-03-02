@@ -12,12 +12,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { EffectsModule } from '@ngrx/effects';
+
 import { ThemeEffects } from 'src/app/store/effects/theme.effects';
-
 import { ListThemeComponent } from './list-theme.component';
-import { ThemeDetailModalModule } from '../theme-detail-modal/theme-detail-modal.module';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -34,8 +33,7 @@ const Materials= [
   imports: [
     CommonModule,
     EffectsModule.forFeature([ThemeEffects]),
-    ...Materials,
-    ThemeDetailModalModule
+    ...Materials
   ],
   exports: [ListThemeComponent]
 })

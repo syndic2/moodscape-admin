@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
-
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 
 import { checkFileType, transformDateTime } from 'src/app/utilities/helpers';
@@ -19,36 +17,37 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
   styleUrls: ['./add-article.component.scss']
 })
 export class AddArticleComponent implements OnInit, OnDestroy {
-  @Input('articleId') articleIdSubject: Subject<number>= new Subject<number>();
+  @Input('articleId') articleIdSubject: Subject<number> = new Subject<number>();
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
 
   private articleIdValue: number;
   public createArticleForm: FormGroup;
-  private getArticleSubscription: Subscription;
-  private getIsResetFormSubscription: Subscription;
   private contentValue: string;
   public headerImage: string;
   private headerImgUpload: File;
-  private validImgType: boolean= true;
+  private validImgType: boolean = true;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store, private formBuilder: FormBuilder, public utilitiesService: UtilitiesService) {
     this.initializeForm();
   }
 
   ngOnInit(): void {
-    this.getIsResetFormSubscription= this.store.select(getIsResetForm).subscribe(res => {
+    const getIsResetFormSubscription = this.store.select(getIsResetForm).subscribe(res => {
       if (res) {
         this.resetForm();
       }
     });
+    this.subscriptions.add(getIsResetFormSubscription);
 
-    this.articleIdSubject.subscribe(value => {
-      this.articleIdValue= value;
-      this.getArticleSubscription= this.store.select(getArticle({ Id: value })).subscribe(res => {
+    const articleIdSUbscription = this.articleIdSubject.subscribe(value => {
+      this.articleIdValue = value;
+
+      const getArticleSubscription = this.store.select(getArticle({ Id: value })).subscribe(res => {
         if (res) {
-          const result= { ...res };
+          const result = { ...res };
 
-          this.headerImage= result.headerImg;
+          this.headerImage = result.headerImg;
           this.createArticleForm.patchValue(result);
           this.createArticleForm.updateValueAndValidity();
 
@@ -59,13 +58,13 @@ export class AddArticleComponent implements OnInit, OnDestroy {
           }
         }
       });
+      this.subscriptions.add(getArticleSubscription);
     });
+    this.subscriptions.add(articleIdSUbscription);
   }
 
   ngOnDestroy() {
-    this.articleIdSubject && this.articleIdSubject.unsubscribe();
-    this.getArticleSubscription && this.getArticleSubscription.unsubscribe();
-    this.getIsResetFormSubscription && this.getIsResetFormSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   get title() {
@@ -97,7 +96,7 @@ export class AddArticleComponent implements OnInit, OnDestroy {
   }
 
   initializeForm() {
-    this.createArticleForm= this.formBuilder.group({
+    this.createArticleForm = this.formBuilder.group({
       title: ['', Validators.required],
       shortSummary: [''],
       author: ['admin', Validators.required],
@@ -113,21 +112,20 @@ export class AddArticleComponent implements OnInit, OnDestroy {
     this.createArticleForm.enable();
     this.author.setValue('admin');
     this.reviewedBy.setValue('admin');
-    this.articleIdValue= null;
-    this.headerImgUpload= null;
-    this.headerImage= '';
+    this.articleIdValue = null;
+    this.headerImgUpload = null;
+    this.headerImage = '';
 
     if (this.fileInput) {
-      this.fileInput.nativeElement.value= '';
+      this.fileInput.nativeElement.value = '';
     }
 
-    this.validImgType= true;
-    this.getArticleSubscription && this.getArticleSubscription.unsubscribe();
+    this.validImgType = true;
   }
 
   onSelectFile(event) {
     if (!checkFileType(event.target.files, ['jpg', 'jpeg', 'png'])) {
-      this.validImgType= false;
+      this.validImgType = false;
       this.store.dispatch(showDialog({
         config: {
           data: {
@@ -139,19 +137,19 @@ export class AddArticleComponent implements OnInit, OnDestroy {
         }
       }));
     } else {
-      const reader= new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
-      reader.onload= (event: any) => {
-        this.headerImage= event.target.result;
+      reader.onload = (event: any) => {
+        this.headerImage = event.target.result;
       };
 
-      this.headerImgUpload= event.target.files[0];
-      this.validImgType= true;
+      this.headerImgUpload = event.target.files[0];
+      this.validImgType = true;
     }
   }
 
   onEditorChanged(event: EditorChangeContent | EditorChangeSelection) {
-    this.contentValue= event.editor.root.innerHTML;
+    this.contentValue = event.editor.root.innerHTML;
   }
 
   onSubmit() {
@@ -174,7 +172,7 @@ export class AddArticleComponent implements OnInit, OnDestroy {
         this.headerImgUrl.setValue('');
       }
 
-      const fields= { ...this.createArticleForm.getRawValue() };
+      const fields = { ...this.createArticleForm.getRawValue() };
 
       if (!this.articleIdValue) {
         this.store.dispatch(validateCreateArticle({

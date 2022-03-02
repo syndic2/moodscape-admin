@@ -4,8 +4,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
-import { transformDateTime } from 'src/app/utilities/helpers';
 import { MOOD_EMOTICON_COLORS } from 'src/app/models/mood.model';
+import { transformDateTime } from 'src/app/utilities/helpers';
 import { fetchTotalMoodGroupByType, fetchMoodsGrowthByYear } from 'src/app/store/actions/mood.action';
 import { getTotalMoodGroupByType, getMoodsGrowthByYear } from 'src/app/store/selectors/mood.selector';
 import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
@@ -28,7 +28,8 @@ export class MoodGraphsComponent implements OnInit, OnDestroy {
   ];
   public moodsGrowthByYearCustomColors: { name: string, value: any }[] = [];
   private getTotalMoodGroupBTypeSubscription: Subscription;
-  private getMoodsGrowthByYearSubscription: Subscription;
+  private getMoodsGrowthByYearSubscription: Subscription
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store, public utilitiesService: UtilitiesService) { }
 
@@ -41,6 +42,7 @@ export class MoodGraphsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.getTotalMoodGroupBTypeSubscription && this.getTotalMoodGroupBTypeSubscription.unsubscribe();
     this.getMoodsGrowthByYearSubscription && this.getMoodsGrowthByYearSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   get startDate() {
@@ -81,7 +83,7 @@ export class MoodGraphsComponent implements OnInit, OnDestroy {
   }
 
   processingData() {
-    this.getTotalMoodGroupBTypeSubscription = this.store.select(getTotalMoodGroupByType).subscribe(res => {
+    const getTotalMoodGroupBTypeSubscription = this.store.select(getTotalMoodGroupByType).subscribe(res => {
       if (!res) {
         this.totalMoodGroupByType = [];
       } else {
@@ -95,21 +97,27 @@ export class MoodGraphsComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.subscriptions.add(getTotalMoodGroupBTypeSubscription);
 
-    this.getMoodsGrowthByYearSubscription = this.store.select(getMoodsGrowthByYear).subscribe(res => {
+    const getMoodsGrowthByYearSubscription = this.store.select(getMoodsGrowthByYear).subscribe(res => {
       if (!res.length) {
         this.moodsGrowthByYear = [];
       } else {
         this.moodsGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.moodAverage }));
         this.moodsGrowthByYear.forEach(moodGrowth => {
-          if (moodGrowth.value === 1) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.BURUK });
-          else if (moodGrowth.value === 2) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.SEDIH });
-          else if (moodGrowth.value === 3) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.NETRAL });
-          else if (moodGrowth.value === 3) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.NETRAL });
-          else if (moodGrowth.value === 4) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.SENANG });
-          else if (moodGrowth.value === 5) this.moodsGrowthByYearCustomColors.push({ name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.GEMBIRA });
+          let data: { name: string, value: string };
+
+          if (moodGrowth.value === 1) data = { name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.BURUK };
+          else if (moodGrowth.value === 2) data = { name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.SEDIH };
+          else if (moodGrowth.value === 3) data = { name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.NETRAL };
+          else if (moodGrowth.value === 4) data = { name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.SENANG };
+          else if (moodGrowth.value === 5) data = { name: moodGrowth.name, value: MOOD_EMOTICON_COLORS.GEMBIRA };
+          else data = { name: moodGrowth.name, value: '#FFF' };
+
+          this.moodsGrowthByYearCustomColors.push(data);
         });
       }
     });
+    this.subscriptions.add(getMoodsGrowthByYearSubscription);
   }
 }

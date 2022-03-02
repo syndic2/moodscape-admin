@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy, Output, ViewChild, EventEmitter } from '@angular/core';
-
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -18,11 +16,11 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
   styleUrls: ['./list-article.component.scss']
 })
 export class ListArticleComponent implements OnInit, OnDestroy {
-  @Output() selectArticleEvent: EventEmitter<number>= new EventEmitter();
+  @Output() selectArticleEvent: EventEmitter<number> = new EventEmitter();
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public tableColumns: string[]= ['title', 'author', 'postedAt', 'reviewedBy', 'actions'];
+  public tableColumns: string[] = ['title', 'author', 'postedAt', 'reviewedBy', 'actions'];
   public tableDataSource: MatTableDataSource<Article>;
   private getArticlesSubscription: Subscription;
 
@@ -30,12 +28,12 @@ export class ListArticleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadArticles();
-    this.getArticlesSubscription= this.store.select(getArticles).subscribe(res => {
+    this.getArticlesSubscription = this.store.select(getArticles).subscribe(res => {
       if (!res.length) {
         this.loadArticles();
       }
 
-      this.tableDataSource= new MatTableDataSource([...res]);
+      this.tableDataSource = new MatTableDataSource([...res]);
       this.tableDataSource.sort = this.sort;
       this.tableDataSource.paginator = this.paginator;
     });
@@ -50,8 +48,8 @@ export class ListArticleComponent implements OnInit, OnDestroy {
   }
 
   onSearch(event: Event) {
-    const field= (event.target as HTMLInputElement).value;
-    this.tableDataSource.filter= field.trim().toLowerCase();
+    const field = (event.target as HTMLInputElement).value;
+    this.tableDataSource.filter = field.trim().toLowerCase();
 
     if (this.tableDataSource.paginator) this.tableDataSource.paginator.firstPage();
   }

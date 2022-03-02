@@ -13,10 +13,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { reducers, metaReducers } from './store/reducers';
-import { ApplicationEffects } from './store/effects/application.effects';
 
 import { environment } from '../environments/environment';
+import { reducers, metaReducers } from './store/reducers';
+import { ApplicationEffects } from './store/effects/application.effects';
 
 import { HttpLoaderInterceptor } from './interceptors/http-loader/http-loader.interceptor';
 import { RequestHeadersInterceptor } from './interceptors/request-headers/request-headers.interceptor';

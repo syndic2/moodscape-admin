@@ -13,14 +13,14 @@ import { ColorSketchModule } from 'ngx-color/sketch';
 
 import { ThemeDetailModalComponent } from './theme-detail-modal.component';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatButtonModule,
   MatDialogModule,
   MatFormFieldModule,
   MatInputModule,
   MatSlideToggleModule
-];  
+];
 
 @NgModule({
   declarations: [ThemeDetailModalComponent],
@@ -32,4 +32,8 @@ const Materials= [
   ],
   exports: [ThemeDetailModalComponent]
 })
-export class ThemeDetailModalModule { }
+export class ThemeDetailModalModule {
+  static getComponent(): typeof ThemeDetailModalComponent {
+    return ThemeDetailModalComponent;
+  }
+}

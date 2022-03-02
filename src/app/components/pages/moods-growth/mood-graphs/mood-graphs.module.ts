@@ -11,8 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { EffectsModule } from '@ngrx/effects';
-import { MoodEffects } from 'src/app/store/effects/mood.effects';
 
+import { MoodEffects } from 'src/app/store/effects/mood.effects';
 import { MoodGraphsComponent } from './mood-graphs.component';
 import { PieChartModule } from 'src/app/components/charts/pie-chart/pie-chart.module';
 import { BarChartModule } from 'src/app/components/charts/bar-chart/bar-chart.module';

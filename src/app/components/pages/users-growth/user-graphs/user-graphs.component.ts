@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -19,9 +18,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   public usersGroupByGender: any[] = [];
   public usersGroupByAge: any[] = [];
   public usersGrowthByYear: any[] = [];
-  private getUsersGroupByGenderSubscription: Subscription;
-  private getUsersGroupByAgeSubscription: Subscription;
-  private getUsersGrowthByYearSubscription: Subscription;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store, public utilitiesService: UtilitiesService) { }
 
@@ -32,9 +29,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getUsersGroupByGenderSubscription && this.getUsersGroupByGenderSubscription.unsubscribe();
-    this.getUsersGroupByAgeSubscription && this.getUsersGroupByAgeSubscription.unsubscribe();
-    this.getUsersGrowthByYearSubscription && this.getUsersGrowthByYearSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   get startDate() {
@@ -76,7 +71,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
   }
 
   processingData() {
-    this.getUsersGroupByGenderSubscription = this.store.select(getUsersGroupByGender).subscribe(res => {
+    const getUsersGroupByGenderSubscription = this.store.select(getUsersGroupByGender).subscribe(res => {
       if (!res) {
         this.usersGroupByGender = [];
       } else {
@@ -86,8 +81,9 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
         ];
       }
     });
+    this.subscriptions.add(getUsersGroupByGenderSubscription);
 
-    this.getUsersGroupByAgeSubscription = this.store.select(getUsersGroupByAge).subscribe(res => {
+    const getUsersGroupByAgeSubscription = this.store.select(getUsersGroupByAge).subscribe(res => {
       if (!res) {
         this.usersGroupByAge = [];
       } else {
@@ -99,13 +95,15 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.subscriptions.add(getUsersGroupByAgeSubscription);
 
-    this.getUsersGrowthByYearSubscription = this.store.select(getUsersGrowthByYear).subscribe(res => {
+    const getUsersGrowthByYearSubscription = this.store.select(getUsersGrowthByYear).subscribe(res => {
       if (!res.length) {
         this.usersGrowthByYear = [];
       } else {
         this.usersGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.users.length }));
       }
     });
+    this.subscriptions.add(getUsersGrowthByYearSubscription);
   }
 }

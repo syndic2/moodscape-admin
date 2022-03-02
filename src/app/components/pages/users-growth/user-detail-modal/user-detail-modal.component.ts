@@ -20,9 +20,9 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
   public updateUserForm: FormGroup;
   public profileImage: string;
   private imgUpload: File;
-  private isValidImgType: boolean= true;
+  private isValidImgType: boolean = true;
   private paswordChangesSubscription: Subscription;
-  private isPasswordChanged: boolean= false;
+  private isPasswordChanged: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,21 +30,21 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
     private store: Store,
     private formBuilder: FormBuilder,
     public utilitiesService: UtilitiesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.profileImage= this.data.user.imgUrl;
+    this.profileImage = this.data.user.imgUrl;
 
     if (this.data.isEditMode) {
       this.initializeForm();
       this.updateUserForm.patchValue({ ...this.data.user });
       this.updateUserForm.updateValueAndValidity();
 
-      this.paswordChangesSubscription= this.password.valueChanges.subscribe(value => {
+      this.paswordChangesSubscription = this.password.valueChanges.subscribe(value => {
         if (value !== this.data.user.password) {
-          this.isPasswordChanged= true;
+          this.isPasswordChanged = true;
         } else {
-          this.isPasswordChanged= false;
+          this.isPasswordChanged = false;
         }
       });
     }
@@ -91,7 +91,7 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
   }
 
   initializeForm() {
-    this.updateUserForm= this.formBuilder.group({
+    this.updateUserForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       gender: ['', Validators.required],
@@ -106,7 +106,7 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
 
   onSelectFile(event) {
     if (!checkFileType(event.target.files, ['jpg', 'jpeg', 'png'])) {
-      this.isValidImgType= false;
+      this.isValidImgType = false;
       this.store.dispatch(showDialog({
         config: {
           data: {
@@ -118,14 +118,14 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
         }
       }));
     } else {
-      const reader= new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
-      reader.onload= (event: any) => {
-        this.profileImage= event.target.result;
+      reader.onload = (event: any) => {
+        this.profileImage = event.target.result;
       };
 
-      this.imgUpload= event.target.files[0];
-      this.isValidImgType= true;
+      this.imgUpload = event.target.files[0];
+      this.isValidImgType = true;
     }
   }
 
@@ -142,8 +142,8 @@ export class UserDetailModalComponent implements OnInit, OnDestroy {
         }
       }));
     } else {
-      const fields= { ...this.updateUserForm.value };
-      fields.dateOfBirth= transformDateTime(new Date(fields.dateOfBirth)).toISODate()
+      const fields = { ...this.updateUserForm.value };
+      fields.dateOfBirth = transformDateTime(new Date(fields.dateOfBirth)).toISODate()
 
       if (!this.isPasswordChanged) {
         delete fields['password'];

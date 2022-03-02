@@ -13,12 +13,12 @@ const routes: Routes = [
     path: '',
     component: MainComponent,
     children: [
+      // {
+      //   path: 'dashboard',
+      //   loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)
+      // },
       {
-        path: 'dashboard',
-        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
-        path: 'users-growth',
+        path: '',
         loadChildren: () => import('../users-growth/users-growth.module').then(m => m.UsersGrowthModule)
       },
       {
@@ -40,6 +40,10 @@ const routes: Routes = [
       {
         path: 'app-feedbacks',
         loadChildren: () => import('../app-feedbacks/app-feedbacks.module').then(m => m.AppFeedbacksModule)
+      },
+      {
+        path: 'chatbot-feedbacks',
+        loadChildren: () => import('../chatbot-feedbacks/chatbot-feedbacks.module').then(m => m.ChatbotFeedbacksModule)
       }
     ]
   }

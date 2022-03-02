@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -14,27 +13,27 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
   templateUrl: './add-theme.component.html',
   styleUrls: ['./add-theme.component.scss']
 })
-export class AddThemeComponent implements OnInit,OnDestroy {
+export class AddThemeComponent implements OnInit, OnDestroy {
   public createThemeForm: FormGroup;
   private getIsResetFormSubscription: Subscription;
 
   constructor(private store: Store, public utilitiesService: UtilitiesService) { }
 
   ngOnInit(): void {
-    this.createThemeForm= new FormGroup({
+    this.createThemeForm = new FormGroup({
       name: new FormControl('', Validators.required),
       colors: new FormGroup({
         primary: new FormControl('', Validators.required),
         primaryRgb: new FormControl(''),
         primaryContrast: new FormControl('#ffffff', Validators.required),
         primaryContrastRgb: new FormControl(''),
-        primaryShade: new FormControl('', Validators.required), 
+        primaryShade: new FormControl('', Validators.required),
         primaryTint: new FormControl('', Validators.required)
       }),
       isActive: new FormControl(true, Validators.required)
     });
 
-    this.getIsResetFormSubscription= this.store.select(getIsResetForm).subscribe(res => {
+    this.getIsResetFormSubscription = this.store.select(getIsResetForm).subscribe(res => {
       if (res) {
         this.createThemeForm.reset();
       }
@@ -82,9 +81,9 @@ export class AddThemeComponent implements OnInit,OnDestroy {
   }
 
   onPrimaryColorChange(event) {
-    const primaryColor= (event.color.hex as string).substring(1);
-    const darkShades= getColorShades(hexToRgb(primaryColor), -10);
-    const lightShades= getColorShades(hexToRgb(primaryColor), 10);
+    const primaryColor = (event.color.hex as string).substring(1);
+    const darkShades = getColorShades(hexToRgb(primaryColor), -10);
+    const lightShades = getColorShades(hexToRgb(primaryColor), 10);
 
     this.primaryColor.setValue(event.color.hex);
     this.primaryRgbColor.setValue(hexToRgb(primaryColor).join(', '));
@@ -94,9 +93,9 @@ export class AddThemeComponent implements OnInit,OnDestroy {
   }
 
   onContrastColorChange(event) {
-    const contrastColor= event.color.hex;
+    const contrastColor = event.color.hex;
 
-    this.contrastColor.setValue(contrastColor); 
+    this.contrastColor.setValue(contrastColor);
     this.contrastRgbColor.setValue(hexToRgb(contrastColor).join(', '));
   }
 

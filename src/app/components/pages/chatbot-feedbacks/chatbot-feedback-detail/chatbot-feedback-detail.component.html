@@ -1,0 +1,64 @@
+<ng-container *ngIf="!data.feedback; else showFeedback">
+  <h1 class="text-lg font-medium m-auto">-Data umpan balik tidak ditemukan-</h1>
+</ng-container>
+
+<ng-template #showFeedback>
+  <!-- HEADER DETAIL -->
+  <div class="flex flex-col gap-y-4">
+    <button (click)="close()" mat-icon-button color="primary" tabindex="-1" class="self-end">
+      <mat-icon color="primary">close</mat-icon>
+    </button>
+
+    <div class="flex flex-col gap-y-1 text-sm">
+      <span>Tanggal:</span>
+      <span class="font-medium">{{ data.feedback.createdAt.date }}</span>
+    </div>
+    <div class="flex flex-col gap-y-1 text-sm">
+      <span>Waktu:</span>
+      <span class="font-medium">{{ data.feedback.createdAt.time }}</span>
+    </div>
+    <div class="flex flex-col gap-y-1 text-sm">
+      <span>Komentar:</span>
+      <p class="font-medium my-0">"{{ data.feedback.review }}"</p>
+    </div>
+    <div class="flex flex-col gap-y-1 text-sm max-w-3/4">
+      <span>Pesan yang diulas:</span>
+      <p class="font-medium my-0">"{{ data.feedback.botMessage.text }}"</p>
+    </div>
+  </div>
+
+  <!-- CHAT HISTORY -->
+  <div class="flex flex-col gap-y-3 mt-10 h-full">
+    <h1 class="text-lg text-center font-medium my-0">Riwayat Pesan</h1>
+    <cdk-virtual-scroll-viewport itemSize="50">
+      <div class="flex flex-col gap-y-8 pr-2">
+        <ng-container *cdkVirtualFor="let message of data.feedback.messages; let last= last">
+          <ng-container *ngIf="message.sender !== 'BOT'; else showBotMessage">
+            <div class="self-end flex flex-col gap-y-1 max-w-1/2">
+              <span class="text-right">Pengguna</span>
+              <div class="rounded-xl bg-purple-700 p-3">
+                <p class="whitespace-pre-wrap text-white text-sm my-0">{{ message.text }}</p>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #showBotMessage>
+            <div class="self-start flex flex-col gap-y-1 max-w-1/2">
+              <span class="text-left">BOT</span>
+              <div class="rounded-xl bg-gray-200 p-3">
+                <p class="whitespace-pre-wrap text-sm my-0">{{ message.text }}</p>
+              </div>
+              <span *ngIf="last" class="text-left text-red-400">*Pesan yang diulas</span>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="flex justify-center gap-x-4 mt-8">
+    <button mat-raised-button (click)="onHandle()" color="primary">Tangani</button>
+    <button mat-raised-button (click)="onDone()" color="primary">Selesai</button>
+  </div>
+</ng-template>

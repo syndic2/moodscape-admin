@@ -1,14 +1,16 @@
 <div class="flex justify-between gap-x-4">
   <div></div>
   <button mat-mini-fab color="primary" (click)="loadData()">
-      <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
+    <mat-icon [ngClass]="{ 'animate-spin': utilitiesService.isLoading | async }">sync</mat-icon>
   </button>
 </div>
 
 <div class="flex flex-col gap-y-12">
   <div class="inline-flex flex-col gap-y-2">
     <h1 class="text-lg font-medium my-0">Kelompok Usia Pengguna</h1>
-    <span class="text-sm italic">*Data dibawah ini ditampilkan bedasarkan seluruh data umpan balik aplikasi dengan kelompok usia penggunanya.</span>
+    <span class="text-sm italic">
+      *Data dibawah ini ditampilkan bedasarkan seluruh data umpan balik aplikasi dengan kelompok usia penggunanya.
+    </span>
   </div>
 
   <div class="flex flex-wrap justify-center items-center gap-14">
@@ -20,21 +22,20 @@
           <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
             <mat-spinner class="m-auto"></mat-spinner>
           </div>
-  
-          <pie-chart 
-            [data]="appFeedbacksGroupByRating" 
-            [colorScheme]="{ domain: pieChartColors }">
+
+          <pie-chart [data]="appFeedbacksGroupByRating" [colorScheme]="{ domain: pieChartColors }">
           </pie-chart>
         </ng-container>
       </div>
     </mat-card>
-  
+
     <div class="grid grid-cols-2 gap-8">
       <ng-container *ngFor="let item of appFeedbacksGroupByRatingCards | keyvalue; let i= index;">
         <mat-card class="mat-elevation-z8 p-5" [style.background-color]="pieChartColors[i]">
           <div class="flex flex-col gap-y-2 text-md text-white font-medium">
             <span>{{ item.value.group }}</span>
-            <span>Rata-rata usia pengguna: {{ item.value.userAverageAge > 0 ? item.value.userAverageAge+' tahun' : '-' }}</span>
+            <span>Rata-rata usia pengguna: {{ item.value.userAverageAge > 0 ? item.value.userAverageAge+' tahun' : '-'
+              }}</span>
           </div>
         </mat-card>
       </ng-container>
@@ -45,7 +46,8 @@
 <div class="flex flex-col gap-y-12 mt-16">
   <div class="inline-flex flex-col gap-y-2">
     <h1 class="text-lg font-medium my-0">Perkembangan Umpan Balik Aplikasi</h1>
-    <span class="text-sm italic">*Data dibawah ini menampilkan perkembangan umpan balik aplikasi dalam kurun waktu ke waktu.</span>
+    <span class="text-sm italic">*Data dibawah ini menampilkan perkembangan umpan balik aplikasi dalam kurun waktu ke
+      waktu.</span>
     <span class="text-sm italic">*Dalam per bulan menampilkan rata-rata nilai rating umpan balik.</span>
   </div>
 
@@ -67,8 +69,9 @@
         <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
           <mat-spinner class="m-auto"></mat-spinner>
         </div>
-  
-        <bar-chart [data]="appFeedbacksGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Rata-rata Nilai Rating'"></bar-chart>
+
+        <bar-chart [data]="appFeedbacksGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Rata-rata Nilai Rating'">
+        </bar-chart>
       </div>
     </ng-container>
   </mat-card>

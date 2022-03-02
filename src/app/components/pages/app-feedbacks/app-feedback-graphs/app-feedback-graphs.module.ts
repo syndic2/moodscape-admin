@@ -11,13 +11,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { EffectsModule } from '@ngrx/effects';
-import { FeedbackEffects } from 'src/app/store/effects/feedback.effects';
 
+import { FeedbackEffects } from 'src/app/store/effects/feedback.effects';
 import { AppFeedbackGraphsComponent } from './app-feedback-graphs.component';
 import { PieChartModule } from 'src/app/components/charts/pie-chart/pie-chart.module';
 import { BarChartModule } from 'src/app/components/charts/bar-chart/bar-chart.module';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatButtonModule,
   MatProgressBarModule,

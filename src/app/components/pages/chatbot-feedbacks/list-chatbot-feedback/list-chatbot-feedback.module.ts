@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -9,14 +8,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 import { EffectsModule } from '@ngrx/effects';
-import { QuillModule } from 'ngx-quill';
 
-import { ArticleEffects } from 'src/app/store/effects/article.effects';
-import { AddArticleComponent } from './add-article.component';
+import { FeedbackEffects } from 'src/app/store/effects/feedback.effects';
+import { ListChatbotFeedbackComponent } from './list-chatbot-feedback.component';
 
 const Materials = [
   MatIconModule,
@@ -26,19 +26,19 @@ const Materials = [
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,
-  MatNativeDateModule,
-  MatDatepickerModule
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatBottomSheetModule
 ];
 
 @NgModule({
-  declarations: [AddArticleComponent],
+  declarations: [ListChatbotFeedbackComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    EffectsModule.forFeature([ArticleEffects]),
-    QuillModule.forRoot(),
-    ...Materials
+    EffectsModule.forFeature([FeedbackEffects]),
+    ...Materials,
   ],
-  exports: [AddArticleComponent]
+  exports: [ListChatbotFeedbackComponent]
 })
-export class AddArticleModule { }
+export class ListChatbotFeedbackModule { }

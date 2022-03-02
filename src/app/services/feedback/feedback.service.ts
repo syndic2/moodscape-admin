@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import gql from 'graphql-query-compress';
 
 import { environment } from 'src/environments/environment';
@@ -12,17 +10,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class FeedbackService {
-
   constructor(private http: HttpClient) { }
-  /** 
-   * Chatbot feedback
-  */
 
-  /** 
+  /**
    * App feedback
   */
   getAppFeedbacks(): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getAppFeedbacks {
           Id,
@@ -51,7 +45,7 @@ export class FeedbackService {
   }
 
   getAppFeedbacksGroupByRating() {
-    const query= gql(`
+    const query = gql(`
       query {
         getAppFeedbacksGroupByRating {
           veryUseful {
@@ -79,7 +73,7 @@ export class FeedbackService {
             userAverageAge
           },
           useless {
-            group, 
+            group,
             users {
               Id,
               gender
@@ -104,7 +98,7 @@ export class FeedbackService {
   }
 
   getAppFeedbacksGrowthByYear(startDate: string, endDate: string): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getAppFeedbacksGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
           month,
@@ -123,7 +117,7 @@ export class FeedbackService {
   }
 
   getAppFeedback(feedbackId: string): Observable<any> {
-    const query= gql(`
+    const query = gql(`
     query {
         getAppFeedback(Id: "${feedbackId}") {
           Id,
@@ -148,7 +142,7 @@ export class FeedbackService {
   }
 
   removeAppFeedbacks(feedbackIds: string[]): Observable<any> {
-    const query=  gql(`
+    const query = gql(`
       mutation {
         removeAppFeedbacks(feedbackIds: ${feedbackIds.map(Id => `"${Id}"`)}) {
           removedFeedbacks,
@@ -162,6 +156,63 @@ export class FeedbackService {
 
     return this.http.post(environment.apiUrl, { query: query }).pipe(
       map((res: any) => res.data.removeAppFeedbacks)
+    );
+  }
+
+  /**
+   * Chatbot feedback
+  */
+  getChatbotFeedbacks(): Observable<any> {
+    const query = gql(`
+      query {
+        getChatbotFeedbacks {
+          Id,
+          review,
+          botMessage {
+            Id,
+            sender,
+            recipientId,
+            text
+          },
+          messages {
+            Id,
+            sender,
+            recipientId,
+            text
+          },
+          user {
+            Id,
+            username,
+            firstName
+          },
+          createdAt {
+            date,
+            time
+          }
+        }
+      }
+    `);
+
+    return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
+      map((res: any) => res.data.getChatbotFeedbacks)
+    );
+  }
+
+  removeChatbotFeedbacks(feedbackIds: string[]): Observable<any> {
+    const query = gql(`
+      mutation {
+        removeChatbotFeedbacks(feedbackIds: ${feedbackIds.map(Id => `"${Id}"`)}) {
+          removedFeedbacks,
+          response {
+            status,
+            text
+          }
+        }
+      }
+    `);
+
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+      map((res: any) => res.data.removeChatbotFeedbacks)
     );
   }
 }

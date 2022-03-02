@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -17,18 +16,21 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 })
 export class AppFeedbackGraphsComponent implements OnInit, OnDestroy {
   public appFeedbacksGrowthRangePicker: FormGroup;
-  public appFeedbacksGroupByRating: any[]= [];
+  public appFeedbacksGroupByRating: any[] = [];
   public appFeedbacksGroupByRatingCards: AppFeedbacksGroupByRating;
-  public appFeedbacksGrowthByYear: any[]= [];
-  public pieChartColors: string[]= ['#3CB403', '#B4CC4E', '#FFD300', '#FFC30B', '#D0312D'];
-  private getAppFeedbacksGroupByRating: Subscription;
-  private getAppFeedbacksGrowthByYear: Subscription;
+  public appFeedbacksGrowthByYear: any[] = [];
+  public pieChartColors: string[] = ['#3CB403', '#B4CC4E', '#FFD300', '#FFC30B', '#D0312D'];
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private store: Store, public utilitiesService: UtilitiesService) { }
 
   ngOnInit(): void {
     this.intializeAppFeedbacksGrowthRangePicker();
     this.processData();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   get startDate() {
@@ -40,60 +42,58 @@ export class AppFeedbackGraphsComponent implements OnInit, OnDestroy {
   }
 
   intializeAppFeedbacksGrowthRangePicker() {
-    this.appFeedbacksGrowthRangePicker= new FormGroup({
+    this.appFeedbacksGrowthRangePicker = new FormGroup({
       startDate: new FormControl(),
       endDate: new FormControl()
     });
 
-    const initialStartDate= new Date();
-    initialStartDate.setFullYear(initialStartDate.getFullYear()-1);
+    const initialStartDate = new Date();
+    initialStartDate.setFullYear(initialStartDate.getFullYear() - 1);
     this.startDate.setValue(initialStartDate);
     this.endDate.setValue(new Date());
 
-    this.endDate.valueChanges.subscribe(value => {
+    const endDateSubscription = this.endDate.valueChanges.subscribe(value => {
       if (value) {
-        this.store.dispatch(fetchAppFeedbacksGrowthByYear({ 
+        this.store.dispatch(fetchAppFeedbacksGrowthByYear({
           startDate: transformDateTime(this.startDate.value).toISODate(),
           endDate: transformDateTime(value).toISODate()
         }));
       }
-    })
+    });
+    this.subscriptions.add(endDateSubscription);
   }
 
   loadData() {
     this.store.dispatch(fetchAppFeedbacksByRating());
-    this.store.dispatch(fetchAppFeedbacksGrowthByYear({ 
-      startDate: transformDateTime(this.startDate.value).toISODate(), 
-      endDate: transformDateTime(this.endDate.value).toISODate() 
-    }));    
+    this.store.dispatch(fetchAppFeedbacksGrowthByYear({
+      startDate: transformDateTime(this.startDate.value).toISODate(),
+      endDate: transformDateTime(this.endDate.value).toISODate()
+    }));
   }
 
   processData() {
-    this.getAppFeedbacksGroupByRating= this.store.select(getAppFeedbacksGroupByRating).subscribe(res => {
+    const getAppFeedbacksGroupByRatingSubscription = this.store.select(getAppFeedbacksGroupByRating).subscribe(res => {
       if (!res) {
-        this.store.dispatch(fetchAppFeedbacksByRating());    
+        this.store.dispatch(fetchAppFeedbacksByRating());
       } else {
-        this.appFeedbacksGroupByRatingCards= { ...res };
+        this.appFeedbacksGroupByRatingCards = { ...res };
         Object.entries(res).forEach(([key, value]) => {
           this.appFeedbacksGroupByRating.push({ name: value.group, value: value.users.length });
         });
       }
     });
+    this.subscriptions.add(getAppFeedbacksGroupByRatingSubscription);
 
-    this.getAppFeedbacksGrowthByYear= this.store.select(getAppFeedbacksGrowthByYear).subscribe(res => {
+    const getAppFeedbacksGrowthByYearSubscription = this.store.select(getAppFeedbacksGrowthByYear).subscribe(res => {
       if (!res.length) {
-        this.store.dispatch(fetchAppFeedbacksGrowthByYear({ 
-          startDate: transformDateTime(this.startDate.value).toISODate(), 
-          endDate: transformDateTime(this.endDate.value).toISODate() 
-        })); 
+        this.store.dispatch(fetchAppFeedbacksGrowthByYear({
+          startDate: transformDateTime(this.startDate.value).toISODate(),
+          endDate: transformDateTime(this.endDate.value).toISODate()
+        }));
       } else {
-        this.appFeedbacksGrowthByYear= [...res].map((object, index) => ({ name: object.month, value: object.averageRating }));
+        this.appFeedbacksGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.averageRating }));
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.getAppFeedbacksGroupByRating && this.getAppFeedbacksGroupByRating.unsubscribe();
-    this.getAppFeedbacksGrowthByYear && this.getAppFeedbacksGrowthByYear.unsubscribe();
+    this.subscriptions.add(getAppFeedbacksGrowthByYearSubscription);
   }
 }

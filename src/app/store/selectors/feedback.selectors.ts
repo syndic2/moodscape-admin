@@ -3,34 +3,37 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { StoreFeatureKeys } from '../feature-keys';
 import { FeedbackState } from '../states';
 
-const selectFeedbackFeature= createFeatureSelector<FeedbackState>(StoreFeatureKeys.FEEDBACK);
-
-/**
- * Chatbot feedback
- */
-
+const selectFeedbackFeature = createFeatureSelector<FeedbackState>(StoreFeatureKeys.FEEDBACK);
 
 /**
  * App feedback
  */
-export const getAppFeedbacks= createSelector(
+export const getAppFeedbacks = createSelector(
   selectFeedbackFeature,
-  state => state.appFeedbacks 
+  state => state.appFeedbacks
 );
 
-export const getAppFeedbacksGroupByRating= createSelector(
+export const getAppFeedbacksGroupByRating = createSelector(
   selectFeedbackFeature,
   state => state.appFeedbacksGroupByRating
 );
 
-export const getAppFeedbacksGrowthByYear= createSelector(
+export const getAppFeedbacksGrowthByYear = createSelector(
   selectFeedbackFeature,
   state => state.appFeedbackGrowthByYear
 );
 
-export const getAppFeedback= (props) => {
+export const getAppFeedback = (props) => {
   return createSelector(
     getAppFeedbacks,
     state => state.find((feedback, index) => feedback.Id === props.Id)
   );
 };
+
+/**
+ * Chatbot feedback
+ */
+export const getChatbotFeedbacks = createSelector(
+  selectFeedbackFeature,
+  state => state.chatbotFeedbacks
+);

@@ -39,7 +39,11 @@
             ],
             "customWebpackConfig": {
               "path": "webpack.config.js"
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "stringify-object",
+              "clone-deep"
+            ]
           },
           "configurations": {
             "production": {

@@ -13,12 +13,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { EffectsModule } from '@ngrx/effects';
+
 import { FeedbackEffects } from 'src/app/store/effects/feedback.effects';
-
 import { ListAppFeedbackComponent } from './list-app-feedback.component';
-import { AppFeedbackDetailModalModule } from '../app-feedback-detail-modal/app-feedback-detail-modal.module';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -36,8 +35,7 @@ const Materials= [
   imports: [
     CommonModule,
     EffectsModule.forFeature([FeedbackEffects]),
-    ...Materials,
-    AppFeedbackDetailModalModule
+    ...Materials
   ],
   exports: [ListAppFeedbackComponent]
 })

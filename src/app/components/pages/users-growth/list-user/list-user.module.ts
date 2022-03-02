@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,14 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { EffectsModule } from '@ngrx/effects';
+
 import { UserEffects } from 'src/app/store/effects/user.effects';
-
 import { ListUserComponent } from './list-user.component';
-import { UserDetailModalModule } from '../user-detail-modal/user-detail-modal.module';
 
-const Materials= [
+const Materials = [
   MatIconModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -34,8 +31,7 @@ const Materials= [
   imports: [
     CommonModule,
     EffectsModule.forFeature([UserEffects]),
-    ...Materials,
-    UserDetailModalModule
+    ...Materials
   ],
   exports: [ListUserComponent]
 })
