@@ -25,6 +25,18 @@
       <span>Pesan yang diulas:</span>
       <p class="font-medium my-0">"{{ data.feedback.botMessage.text }}"</p>
     </div>
+    <div class="flex flex-col gap-y-1 text-sm max-w-3/4">
+      <span>Status ditangani:</span>
+      <p [ngClass]="{
+        'text-red-500': !data.feedback.handleStatus || data.feedback.handleStatus === 'NO_ACTION',
+        'text-yellow-500': data.feedback.handleStatus === 'ON_CHECK',
+        'text-green-500': data.feedback.handleStatus === 'COMPLETE'
+      }" class="font-medium my-0">
+        {{ data.feedback.handleStatus ? (data.feedback.handleStatus === 'ON_CHECK' ? 'SEDANG DITANGANI' :
+        (data.feedback.handleStatus === 'COMPLETE' ? 'SUDAH
+        DITANGANI': 'BELUM DITANGANI' )) : 'BELUM DITANGANI' }}
+      </p>
+    </div>
   </div>
 
   <!-- CHAT HISTORY -->
@@ -58,7 +70,22 @@
 
   <!-- ACTION BUTTONS -->
   <div class="flex justify-center gap-x-4 mt-8">
-    <button mat-raised-button (click)="onHandle()" color="primary">Tangani</button>
-    <button mat-raised-button (click)="onDone()" color="primary">Selesai</button>
+    <ng-container
+      *ngIf="!data.feedback.handleStatus || data.feedback.handleStatus === 'NO_ACTION'; else showOnCheckOrComplete">
+      <button mat-raised-button (click)="onHandle('ON_CHECK')" color="primary">Periksa</button>
+      <button mat-raised-button (click)="onHandle('COMPLETE')" color="primary">Tertangani</button>
+    </ng-container>
+
+    <ng-template #showOnCheckOrComplete>
+      <ng-container *ngIf="data.feedback.handleStatus === 'ON_CHECK'; else showComplete">
+        <button mat-raised-button (click)="onHandle('ON_CHECK')" color="primary">Simpan</button>
+        <button mat-raised-button (click)="onHandle('COMPLETE')" color="primary">Selesai ditangani</button>
+      </ng-container>
+
+      <ng-template #showComplete>
+        <button mat-raised-button (click)="onHandle('COMPLETE')" color="primary">Simpan</button>
+        <button mat-raised-button (click)="onHandle('ON_CHECK')" color="primary">Kembalikan ke Periksa</button>
+      </ng-template>
+    </ng-template>
   </div>
 </ng-template>

@@ -1,5 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { Store } from '@ngrx/store';
+
+import { showDialog } from 'src/app/store/actions/application.actions';
 
 @Component({
   selector: 'chatbot-feedback-detail',
@@ -8,7 +11,11 @@ import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bott
 })
 export class ChatbotFeedbackDetailComponent implements OnInit {
 
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any, private bottomSheetRef: MatBottomSheetRef) { }
+  constructor(
+    private store: Store,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    private bottomSheetRef: MatBottomSheetRef
+  ) { }
 
   ngOnInit(): void {
   }
@@ -17,11 +24,16 @@ export class ChatbotFeedbackDetailComponent implements OnInit {
     this.bottomSheetRef.dismiss();
   }
 
-  onHandle() {
+  async onHandle(handleStatus: 'NO_ACTION' | 'ON_CHECK' | 'COMPLETE') {
+    const { ChatbotFeedbackHandleModalModule } = await import('../chatbot-feedback-handle-modal/chatbot-feedback-handle-modal.module');
 
-  }
-
-  onDone() {
-
+    this.store.dispatch(showDialog({
+      component: ChatbotFeedbackHandleModalModule.getComponent(),
+      config: {
+        width: '35%',
+        maxWidth: '50%',
+        data: { feedback: this.data.feedback, handleStatus }
+      }
+    }));
   }
 }

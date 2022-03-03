@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -17,17 +18,31 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
   styleUrls: ['./list-app-feedback.component.scss']
 })
 export class ListAppFeedbackComponent implements OnInit, OnDestroy {
+  @Input() handleStatus: string = 'NO_ACTION';
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public tableColumns: string[] = ['position', 'user', 'rating', 'featureCategory', 'createdAt_date', 'createdAt_time', 'actions'];
+  public tableColumns: string[] = [
+    'position',
+    'user',
+    'email',
+    'rating',
+    'featureCategory',
+    'createdAt_date',
+    'createdAt_time',
+    'actions'
+  ];
   public tableDataSource: MatTableDataSource<AppFeedback>;
   private getAppFeedbacksSubscription: Subscription;
 
-  constructor(private store: Store, public utilitiesService: UtilitiesService) { }
+  constructor(
+    private store: Store,
+    private matDialog: MatDialog,
+    public utilitiesService: UtilitiesService
+  ) { }
 
   ngOnInit(): void {
-    this.getAppFeedbacksSubscription = this.store.select(getAppFeedbacks).subscribe(res => {
+    this.getAppFeedbacksSubscription = this.store.select(getAppFeedbacks(this.handleStatus)).subscribe(res => {
       if (!res.length) {
         this.loadAppFeedbacks();
       }
@@ -65,6 +80,16 @@ export class ListAppFeedbackComponent implements OnInit, OnDestroy {
         }
       }
     }))
+  }
+
+  async onHandle(feedback: AppFeedback) {
+    const { AppFeedbackHandleModalModule } = await import('../app-feedback-handle-modal/app-feedback-handle-modal.module');
+
+    this.matDialog.open(AppFeedbackHandleModalModule.getComponent(), {
+      width: '35%',
+      maxWidth: '50%',
+      data: { feedback, handleStatus: this.handleStatus }
+    });
   }
 
   onRemove(feedback: AppFeedback) {

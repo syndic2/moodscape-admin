@@ -34,6 +34,11 @@
         <td mat-cell *matCellDef="let feedback">{{ feedback.user.username }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="review">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Komentar</th>
+        <td mat-cell *matCellDef="let feedback">{{ feedback.review }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="createdAt_date">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tanggal Terbuat</th>
         <td mat-cell *matCellDef="let feedback">{{ feedback.createdAt.date }}</td>
@@ -47,8 +52,11 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let feedback">
-          <button mat-icon-button (click)="onView(feedback)" class="text-green-500">
-            <mat-icon color="primary">remove_red_eye</mat-icon>
+          <button mat-icon-button color="primary" (click)="onView(feedback)">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="onHandle(feedback)">
+            <mat-icon>note_add</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="onRemove(feedback)">
             <mat-icon>delete</mat-icon>

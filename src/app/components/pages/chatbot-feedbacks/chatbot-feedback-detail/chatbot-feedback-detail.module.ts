@@ -4,14 +4,12 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
 
 import { ChatbotFeedbackDetailComponent } from './chatbot-feedback-detail.component';
 
 const Materials = [
   MatIconModule,
-  MatButtonModule,
-  MatDialogModule
+  MatButtonModule
 ];
 
 @NgModule({

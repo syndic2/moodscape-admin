@@ -11,22 +11,26 @@ import {
   fetchAppFeedbacks,
   fetchAppFeedbacksByRating,
   fetchAppFeedbacksGrowthByYear,
+  fetchHandleAppFeedback,
   removeAppFeedbacksConfirmation,
   fetchRemoveAppFeedbacks,
 
   setAppFeedbacks,
   setAppFeedbacksGroupByRating,
   setAppFeedbacksGrowthByYear,
+  handleAppFeedback,
   removeAppFeedbacks,
 
   /**
    * Chatbot feedback
    */
   fetchChatbotFeedbacks,
+  fetchHandleChatbotFeedback,
   removeChatbotFeedbacksConfirmation,
   fetchRemoveChatbotFeedbacks,
 
   setChatbotFeedbacks,
+  handleChatbotFeedback,
   removeChatbotFeedbacks
 } from '../actions/feedback.actions';
 import { FeedbackService } from 'src/app/services/feedback/feedback.service';
@@ -55,6 +59,13 @@ export class FeedbackEffects {
     ofType(fetchAppFeedbacksGrowthByYear),
     exhaustMap(({ startDate, endDate }) => this.feedbackService.getAppFeedbacksGrowthByYear(startDate, endDate).pipe(
       map(res => setAppFeedbacksGrowthByYear({ feedbacks: res }))
+    ))
+  ));
+
+  handleAppFeedback$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchHandleAppFeedback),
+    exhaustMap(({ feedbackId, handleStatus, handleNote }) => this.feedbackService.handleAppFeedback(feedbackId, handleStatus, handleNote).pipe(
+      map(() => handleChatbotFeedback({ feedbackId, handleStatus, handleNote }))
     ))
   ));
 
@@ -96,6 +107,13 @@ export class FeedbackEffects {
     ofType(fetchChatbotFeedbacks),
     exhaustMap(() => this.feedbackService.getChatbotFeedbacks().pipe(
       map(res => setChatbotFeedbacks({ feedbacks: res }))
+    ))
+  ));
+
+  handleChatbotFeedback$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchHandleChatbotFeedback),
+    exhaustMap(({ feedbackId, handleStatus, handleNote }) => this.feedbackService.handleChatbotFeedback(feedbackId, handleStatus, handleNote).pipe(
+      map(() => handleChatbotFeedback({ feedbackId, handleStatus, handleNote }))
     ))
   ));
 

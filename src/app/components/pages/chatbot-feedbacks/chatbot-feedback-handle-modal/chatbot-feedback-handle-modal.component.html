@@ -1,0 +1,16 @@
+<div class="flex justify-end">
+  <button mat-icon-button mat-dialog-close tabindex="-1">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="w-full">
+  <div class="flex flex-col gap-y-4">
+    <mat-form-field class="w-full mt-4">
+      <mat-label>Catatan tambahan</mat-label>
+      <textarea [(ngModel)]="handleNote" matInput cols="15" rows="5" placeholder="Catatan tambahan"></textarea>
+    </mat-form-field>
+
+    <button (click)="onHandle()" mat-raised-button color="primary" class="mx-auto">Simpan</button>
+  </div>
+</mat-dialog-content>

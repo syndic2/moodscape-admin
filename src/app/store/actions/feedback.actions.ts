@@ -25,6 +25,11 @@ export const removeAppFeedbacksConfirmation = createAction(
   props<{ feedbackIds: string[] }>()
 );
 
+export const fetchHandleAppFeedback = createAction(
+  '[App Feedback/API] Handle app feedback',
+  props<{ feedbackId: string, handleStatus: string, handleNote: string }>()
+);
+
 export const fetchRemoveAppFeedbacks = createAction(
   '[App Feedback/API] Remove app feedbacks',
   props<{ feedbackIds: string[] }>()
@@ -46,6 +51,11 @@ export const setAppFeedbacksGrowthByYear = createAction(
   props<{ feedbacks: AppFeedbacksGrowthByYear[] }>()
 );
 
+export const handleAppFeedback = createAction(
+  '[App Feedback/STORE] Set handle app feedback',
+  props<{ feedbackId: string, handleStatus: string, handleNote: string }>()
+);
+
 export const removeAppFeedbacks = createAction(
   '[App Feedback/STORE] Remove app feedbacks',
   props<{ feedbackIds: string[] }>()
@@ -56,6 +66,11 @@ export const removeAppFeedbacks = createAction(
  */
 //Fetch API
 export const fetchChatbotFeedbacks = createAction('[Chatbot Feedback/API] Get chatbot feedbacks');
+
+export const fetchHandleChatbotFeedback = createAction(
+  '[Chatbot Feedback/API] Handle chatbot feedback',
+  props<{ feedbackId: string, handleStatus: string, handleNote: string }>()
+);
 
 export const removeChatbotFeedbacksConfirmation = createAction(
   '[Chatbot Feedback/API] Remove chatbot feedbacks confirmation',
@@ -71,6 +86,11 @@ export const fetchRemoveChatbotFeedbacks = createAction(
 export const setChatbotFeedbacks = createAction(
   '[Chatbot Feedback/STORE] Set chatbot feedback',
   props<{ feedbacks: ChatbotFeedback[] }>()
+);
+
+export const handleChatbotFeedback = createAction(
+  '[Chatbot Feedback/STORE] Set handle chatbot feedback',
+  props<{ feedbackId: string, handleStatus: string, handleNote: string }>()
 );
 
 export const removeChatbotFeedbacks = createAction(

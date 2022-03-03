@@ -1,6 +1,6 @@
 <div class="flex justify-end">
   <button mat-icon-button mat-dialog-close color="primary" tabindex="-1">
-      <mat-icon color="primary">close</mat-icon>
+    <mat-icon color="primary">close</mat-icon>
   </button>
 </div>
 
@@ -13,7 +13,7 @@
           <span>{{ data.feedback.featureCategory }}</span>
           <star-rating [rating]="data.feedback.rating"></star-rating>
         </div>
-  
+
         <div class="inline-flex flex-col items-end gap-y-2">
           <span>{{ data.feedback.createdAt.date }}</span>
           <span>{{ data.feedback.createdAt.time }}</span>
@@ -26,17 +26,31 @@
           <span>:</span>
           <span>{{ data.feedback.user.email }}</span>
         </div>
-  
+
         <label class="font-medium">Username</label>
         <div class="flex gap-x-4">
           <span>:</span>
-          <span>{{ data.feedback.user.username }}</span>
+          <span>{{ data.feedback.user.username ? data.feedback.user.username : '-' }}</span>
         </div>
 
         <label class="font-medium">Ulasan</label>
         <div class="flex gap-x-4">
           <span>:</span>
           <span>{{ data.feedback.review }}</span>
+        </div>
+
+        <label class="font-medium">Status ditangani</label>
+        <div class="flex gap-x-4">
+          <span>:</span>
+          <span [ngClass]="{
+              'text-red-500': !data.feedback.handleStatus || data.feedback.handleStatus === 'NO_ACTION',
+              'text-yellow-500': data.feedback.handleStatus === 'ON_CHECK',
+              'text-green-500': data.feedback.handleStatus === 'COMPLETE'
+            }" class="font-medium">
+            {{ data.feedback.handleStatus ? (data.feedback.handleStatus === 'ON_CHECK' ? 'SEDANG DITANGANI' :
+            (data.feedback.handleStatus === 'COMPLETE' ? 'SUDAH
+            DITANGANI': 'BELUM DITANGANI' )) : 'BELUM DITANGANI' }}
+          </span>
         </div>
       </div>
     </div>

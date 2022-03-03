@@ -8,6 +8,8 @@ export interface AppFeedback {
   rating: number;
   review: string;
   featureCategory: string;
+  handleStatus: string;
+  handleNote: string;
   createdAt: {
     date: string;
     time: string;
@@ -51,6 +53,8 @@ export interface ChatbotFeedback {
   botMessage: ChatbotMessage;
   messages: ChatbotMessage[];
   user: User;
+  handleStatus: string;
+  handleNote: string;
   createdAt: {
     date: string;
     time: string;

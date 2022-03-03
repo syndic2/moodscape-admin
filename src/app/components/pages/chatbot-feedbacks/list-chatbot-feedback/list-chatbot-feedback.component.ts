@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { ChatbotFeedback } from 'src/app/models/feedback.model';
-// import { showDialog } from 'src/app/store/actions/application.actions';
+import { showDialog } from 'src/app/store/actions/application.actions';
 import { fetchChatbotFeedbacks, removeChatbotFeedbacksConfirmation } from 'src/app/store/actions/feedback.actions';
 import { getChatbotFeedbacks } from 'src/app/store/selectors/feedback.selectors';
 import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
@@ -18,10 +18,18 @@ import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
   styleUrls: ['./list-chatbot-feedback.component.scss']
 })
 export class ListChatbotFeedbackComponent implements OnInit, OnDestroy {
+  @Input() handleStatus: string = 'NO_ACTION';
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public tableColumns: string[] = ['position', 'user', 'createdAt_date', 'createdAt_time', 'actions'];
+  public tableColumns: string[] = [
+    'position',
+    'user',
+    'review',
+    'createdAt_date',
+    'createdAt_time',
+    'actions'
+  ];
   public tableDataSource: MatTableDataSource<ChatbotFeedback>;
   private getChatbotFeedbacksSubscription: Subscription;
 
@@ -32,15 +40,7 @@ export class ListChatbotFeedbackComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.getChatbotFeedbacksSubscription = this.store.select(getChatbotFeedbacks).subscribe(res => {
-      if (!res.length) {
-        this.loadChatbotFeedbacks();
-      }
-
-      this.tableDataSource = new MatTableDataSource([...res]);
-      this.tableDataSource.sort = this.sort;
-      this.tableDataSource.paginator = this.paginator;
-    });
+    this.loadChatbotFeedbacks();
   }
 
   ngOnDestroy(): void {
@@ -49,6 +49,11 @@ export class ListChatbotFeedbackComponent implements OnInit, OnDestroy {
 
   loadChatbotFeedbacks() {
     this.store.dispatch(fetchChatbotFeedbacks());
+    this.getChatbotFeedbacksSubscription = this.store.select(getChatbotFeedbacks(this.handleStatus)).subscribe(res => {
+      this.tableDataSource = new MatTableDataSource([...res]);
+      this.tableDataSource.sort = this.sort;
+      this.tableDataSource.paginator = this.paginator;
+    });
   }
 
   onSearch(event: Event) {
@@ -60,10 +65,19 @@ export class ListChatbotFeedbackComponent implements OnInit, OnDestroy {
 
   async onView(feedback: ChatbotFeedback) {
     const { ChatbotFeedbackDetailModule } = await import('../chatbot-feedback-detail/chatbot-feedback-detail.module');
+    this.bottomSheet.open(ChatbotFeedbackDetailModule.getComponent(), { data: { feedback } });
+  }
 
-    this.bottomSheet.open(ChatbotFeedbackDetailModule.getComponent(), {
-      data: { feedback }
-    });
+  async onHandle(feedback: ChatbotFeedback) {
+    const { ChatbotFeedbackHandleModalModule } = await import('../chatbot-feedback-handle-modal/chatbot-feedback-handle-modal.module');
+    this.store.dispatch(showDialog({
+      component: ChatbotFeedbackHandleModalModule.getComponent(),
+      config: {
+        width: '35%',
+        maxWidth: '50%',
+        data: { feedback, handleStatus: this.handleStatus }
+      }
+    }));
   }
 
   onRemove(feedback: ChatbotFeedback) {

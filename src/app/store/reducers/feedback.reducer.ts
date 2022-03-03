@@ -6,9 +6,11 @@ import {
   setAppFeedbacks,
   setAppFeedbacksGroupByRating,
   setAppFeedbacksGrowthByYear,
+  handleAppFeedback,
   removeAppFeedbacks,
 
   setChatbotFeedbacks,
+  handleChatbotFeedback,
   removeChatbotFeedbacks
 } from '../actions/feedback.actions';
 
@@ -28,6 +30,16 @@ export const feedbackReducer = createReducer(
   on(setAppFeedbacks, (state, { feedbacks }) => ({ ...state, appFeedbacks: [...feedbacks] })),
   on(setAppFeedbacksGroupByRating, (state, { feedbacksGroupByRating }) => ({ ...state, appFeedbacksGroupByRating: feedbacksGroupByRating })),
   on(setAppFeedbacksGrowthByYear, (state, { feedbacks }) => ({ ...state, appFeedbackGrowthByYear: [...feedbacks] })),
+  on(handleAppFeedback, (state, { feedbackId, handleStatus, handleNote }) => ({
+    ...state,
+    appFeedbacks: [...state.appFeedbacks].map(feedback => {
+      if (feedbackId !== feedback.Id) {
+        return feedback;
+      }
+
+      return { ...feedback, handleStatus, handleNote };
+    })
+  })),
   on(removeAppFeedbacks, (state, { feedbackIds }) => ({
     ...state,
     appFeedbacks: [
@@ -43,6 +55,16 @@ export const feedbackReducer = createReducer(
    * Chatbot feedback
    */
   on(setChatbotFeedbacks, (state, { feedbacks }) => ({ ...state, chatbotFeedbacks: [...feedbacks] })),
+  on(handleChatbotFeedback, (state, { feedbackId, handleStatus, handleNote }) => ({
+    ...state,
+    chatbotFeedbacks: [...state.chatbotFeedbacks].map(feedback => {
+      if (feedbackId !== feedback.Id) {
+        return feedback;
+      }
+
+      return { ...feedback, handleStatus, handleNote };
+    })
+  })),
   on(removeChatbotFeedbacks, (state, { feedbackIds }) => ({
     ...state,
     chatbotFeedbacks: [

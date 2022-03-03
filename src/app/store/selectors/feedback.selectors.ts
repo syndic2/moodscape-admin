@@ -8,9 +8,19 @@ const selectFeedbackFeature = createFeatureSelector<FeedbackState>(StoreFeatureK
 /**
  * App feedback
  */
-export const getAppFeedbacks = createSelector(
+export const getAppFeedbacks = (handleStatus: string) => createSelector(
   selectFeedbackFeature,
-  state => state.appFeedbacks
+  state => [...state.appFeedbacks].filter(feedback => {
+    if (feedback.handleStatus) {
+      if (feedback.handleStatus === handleStatus) {
+        return feedback;
+      }
+    } else {
+      if (handleStatus === 'NO_ACTION') {
+        return feedback;
+      }
+    }
+  })
 );
 
 export const getAppFeedbacksGroupByRating = createSelector(
@@ -25,15 +35,27 @@ export const getAppFeedbacksGrowthByYear = createSelector(
 
 export const getAppFeedback = (props) => {
   return createSelector(
-    getAppFeedbacks,
-    state => state.find((feedback, index) => feedback.Id === props.Id)
+    getAppFeedbacks(props.handleStatus),
+    state => state.find(feedback => feedback.Id === props.Id)
   );
 };
 
 /**
  * Chatbot feedback
  */
-export const getChatbotFeedbacks = createSelector(
+export const getChatbotFeedbacks = (handleStatus: string) => createSelector(
   selectFeedbackFeature,
-  state => state.chatbotFeedbacks
+  state => [...state.chatbotFeedbacks].filter(feedback => {
+    if (feedback.handleStatus) {
+      if (feedback.handleStatus === handleStatus) {
+        return feedback;
+      }
+    } else {
+      if (handleStatus === 'NO_ACTION') {
+        return feedback;
+      }
+    }
+  })
 );
+
+

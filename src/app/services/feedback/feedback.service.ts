@@ -31,6 +31,8 @@ export class FeedbackService {
           rating,
           review,
           featureCategory,
+          handleStatus,
+          handleNote
           createdAt {
             date,
             time
@@ -141,6 +143,27 @@ export class FeedbackService {
     );
   }
 
+  handleAppFeedback(feedbackId: string, handleStatus: string, handleNote: string = ''): Observable<any> {
+    const query = gql(`
+      mutation {
+        handleAppFeedback(
+          feedbackId: "${feedbackId}",
+          handleStatus: "${handleStatus}",
+          handleNote: "${handleNote}",
+        ) {
+          response {
+            text,
+            status
+          }
+        }
+      }
+    `);
+
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+      map((res: any) => res.data.handleAppFeedback)
+    );
+  }
+
   removeAppFeedbacks(feedbackIds: string[]): Observable<any> {
     const query = gql(`
       mutation {
@@ -185,6 +208,8 @@ export class FeedbackService {
             username,
             firstName
           },
+          handleStatus,
+          handleNote,
           createdAt {
             date,
             time
@@ -195,6 +220,27 @@ export class FeedbackService {
 
     return this.http.get(`${environment.apiUrl}?query=${query}`).pipe(
       map((res: any) => res.data.getChatbotFeedbacks)
+    );
+  }
+
+  handleChatbotFeedback(feedbackId: string, handleStatus: string, handleNote: string = ''): Observable<any> {
+    const query = gql(`
+      mutation {
+        handleChatbotFeedback(
+          feedbackId: "${feedbackId}",
+          handleStatus: "${handleStatus}",
+          handleNote: "${handleNote}",
+        ) {
+          response {
+            text,
+            status
+          }
+        }
+      }
+    `);
+
+    return this.http.post(`${environment.apiUrl}`, { query: query }).pipe(
+      map((res: any) => res.data.handleChatbotFeedback)
     );
   }
 

@@ -1,0 +1,35 @@
+<div class="flex justify-end">
+  <button mat-icon-button mat-dialog-close tabindex="-1">
+    <mat-icon color="primary">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="w-full">
+  <div class="flex flex-col gap-y-4">
+    <mat-form-field class="w-full mt-4">
+      <mat-label>Catatan tambahan</mat-label>
+      <textarea [(ngModel)]="handleNote" matInput cols="15" rows="5" placeholder="Catatan tambahan"></textarea>
+    </mat-form-field>
+
+    <div class="flex flex-wrap justify-center items-center gap-x-4">
+      <ng-container
+        *ngIf="!data.feedback.handleStatus || data.handleStatus === 'NO_ACTION'; else showOnCheckOrComplete">
+        <button (click)="onSave()" mat-raised-button color="primary">Simpan</button>
+        <button (click)="onHandle('ON_CHECK')" mat-raised-button color="primary">Tangani</button>
+        <button (click)="onHandle('COMPLETE')" mat-raised-button color="primary">Tertangani</button>
+      </ng-container>
+
+      <ng-template #showOnCheckOrComplete>
+        <ng-container *ngIf="data.handleStatus === 'ON_CHECK'; else showComplete">
+          <button (click)="onSave()" mat-raised-button color="primary">Simpan</button>
+          <button (click)="onHandle('COMPLETE')" mat-raised-button color="primary">Sudah ditangani</button>
+        </ng-container>
+
+        <ng-template #showComplete>
+          <button (click)="onSave()" mat-raised-button color="primary">Simpan</button>
+          <button (click)="onHandle('ON_CHECK')" mat-raised-button color="primary">Pindahkan ke tangani</button>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</mat-dialog-content>
