@@ -44,7 +44,12 @@ export class AuthenticationService {
     `);
 
     return this.http.post(`${this.apiUrl}`, { query: query }).pipe(
-      map((res: any) => res.data.adminLogin)
+      map((res: any) => {
+        localStorage.setItem('auth-token', res.data.adminLogin.accessToken);
+        localStorage.setItem('auth-refresh-token', res.data.adminLogin.refreshToken);
+
+        return res.data.adminLogin;
+      })
     );
   }
 }

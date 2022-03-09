@@ -24,7 +24,7 @@ export class ListChatbotFeedbackComponent implements OnInit, OnDestroy {
 
   public tableColumns: string[] = [
     'position',
-    'user',
+    //'user',
     'review',
     'createdAt_date',
     'createdAt_time',

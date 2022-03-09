@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import StringifyObject from 'stringify-object';
 import gql from 'graphql-query-compress';
 
-import { environment }from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +13,8 @@ import { environment }from 'src/environments/environment';
 export class ArticleService {
   constructor(private http: HttpClient) { }
 
-  getArticles(title: string= ''): Observable<any> {
-    const query= gql(`
+  getArticles(title: string = ''): Observable<any> {
+    const query = gql(`
       query {
         getArticles(title: "${title}") {
           Id,
@@ -39,7 +37,7 @@ export class ArticleService {
   }
 
   getArticle(id: string): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getArticle(Id: "${id}") {
           Id,
@@ -62,8 +60,8 @@ export class ArticleService {
   }
 
   createArticle(fields: {}, headerImgUpload: File): Observable<any> {
-    const args= StringifyObject(fields, { singleQuotes: false });
-    const operations= {
+    const args = StringifyObject(fields, { singleQuotes: false });
+    const operations = {
       query: gql(`
         mutation($file: Upload) {
           createArticle(fields: ${args}, headerImgUpload: $file) {
@@ -90,11 +88,11 @@ export class ArticleService {
         file: null
       }
     };
-    const _map= {
+    const _map = {
       file: ['variables.file']
     };
 
-    const formData= new FormData();
+    const formData = new FormData();
     formData.append('operations', JSON.stringify(operations));
     formData.append('map', JSON.stringify(_map));
     formData.append('file', headerImgUpload ? headerImgUpload : new File([], 'default'));
@@ -110,8 +108,8 @@ export class ArticleService {
   }
 
   updateArticle(articleId, fields: {}, headerImgUpload: File): Observable<any> {
-    const args= StringifyObject(fields, { singleQuotes: false });
-    const operations= {
+    const args = StringifyObject(fields, { singleQuotes: false });
+    const operations = {
       query: gql(`
         mutation($file: Upload) {
           updateArticle(Id: ${articleId}, fields: ${args}, headerImgUpload: $file) {
@@ -138,11 +136,11 @@ export class ArticleService {
         file: null
       }
     };
-    const _map= { 
+    const _map = {
       file: ['variables.file']
     };
 
-    const formData= new FormData();
+    const formData = new FormData();
     formData.append('operations', JSON.stringify(operations))
     formData.append('map', JSON.stringify(_map));
     formData.append('file', headerImgUpload ? headerImgUpload : new File([], 'default'));
@@ -158,7 +156,7 @@ export class ArticleService {
   }
 
   removeArticles(articleIds: number[]): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       mutation {
         removeArticles(articleIds: ${articleIds}) {
           removedArticles,

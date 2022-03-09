@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "moodscape-admin-app",
+    "public": "dist/moodscape-admin",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

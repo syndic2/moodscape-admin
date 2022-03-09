@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Store } from '@ngrx/store';
 
 import { logout } from 'src/app/store/actions/application.actions';
@@ -11,7 +10,7 @@ import { logout } from 'src/app/store/actions/application.actions';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @Output() toogleSideBarEmitter: EventEmitter<any>= new EventEmitter();
+  @Output() toogleSideBarEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor(private store: Store, private router: Router) { }
 
@@ -23,7 +22,9 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.router.navigate(['/login']);
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('auth-refresh-token');
     this.store.dispatch(logout());
+    this.router.navigate(['/login']);
   }
 }

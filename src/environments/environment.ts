@@ -2,7 +2,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const urls= {
+const urls = {
   baseUrl: {
     development: 'http://localhost:4200',
     production: '',
@@ -16,7 +16,7 @@ const urls= {
 export const environment = {
   production: false,
   baseUrl: urls.baseUrl.development,
-  apiUrl: urls.apiUrl.development,
+  apiUrl: urls.apiUrl.production,
 };
 
 /*
