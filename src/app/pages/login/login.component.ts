@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 
 import { showDialog } from 'src/app/store/actions/application.actions';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { UtilitiesService } from 'src/app/services/utilities/utilities.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store,
     private titleService: Title,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    public utilitiesService: UtilitiesService
   ) {
     this.titleService.setTitle('Masuk');
   }
@@ -71,7 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           }));
         } else {
-          this.router.navigate(['/']);
+          this.router.navigate(['/main']);
         }
       });
     }

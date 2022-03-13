@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'dashboard'
+    redirectTo: 'users-growth'
   },
   {
     path: '',
@@ -18,7 +18,7 @@ const routes: Routes = [
       //   loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardModule)
       // },
       {
-        path: '',
+        path: 'users-growth',
         loadChildren: () => import('../users-growth/users-growth.module').then(m => m.UsersGrowthModule)
       },
       {

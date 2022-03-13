@@ -6,9 +6,6 @@
       <mat-form-field appearance="fill">
         <mat-label>Email atau nama pengguna</mat-label>
         <input type="text" matInput [formControl]="emailOrUsername" placeholder="Email atau nama pengguna anda">
-        <!--<mat-error *ngIf="emailOrUsername.hasError('email') && !emailOrUsername.hasError('required')">
-          Format email tidak valid
-        </mat-error>-->
         <mat-error *ngIf="emailOrUsername.hasError('required')">
           Email tidak boleh kosong
         </mat-error>
@@ -22,7 +19,12 @@
         </mat-error>
       </mat-form-field>
 
-      <button type="submit" mat-raised-button color="primary" class="mt-2">Masuk</button>
+      <ng-container *ngIf="utilitiesService.isLoading | async; else finishLoading">
+        <mat-spinner [diameter]="40" class="mx-auto"></mat-spinner>
+      </ng-container>
+      <ng-template #finishLoading>
+        <button type="submit" mat-raised-button color="primary" class="mt-2">Masuk</button>
+      </ng-template>
     </form>
   </mat-card>
 </div>

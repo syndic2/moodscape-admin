@@ -32,7 +32,9 @@ export interface AppFeedbacksGroupByRating {
 }
 
 export interface AppFeedbacksGrowthByYear {
-  month: string;
+  monthName: string;
+  monthNumber: number;
+  year: number;
   feedbacks: AppFeedback[];
   averageRating: number;
 }

@@ -52,27 +52,29 @@
     <span class="text-sm italic">*Data dibawah ini menampilkan perkembangan pengguna kurun waktu ke waktu.</span>
   </div>
 
-  <mat-form-field appearance="fill" class="w-fit-content mx-auto">
-    <mat-label>Pilih tanggal awal dan akhir</mat-label>
-    <mat-date-range-input [rangePicker]="picker" [formGroup]="usersGrowthRangePicker">
-      <input matStartDate placeholder="Tanggal awal" formControlName="startDate">
-      <input matEndDate placeholder="Tanggal akhir" formControlName="endDate">
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>
+  <div class="flex flex-col items-center gap-y-2">
+    <mat-form-field appearance="fill">
+      <mat-label>Pilih tanggal awal dan akhir</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [formGroup]="usersGrowthRangePicker">
+        <input matStartDate placeholder="Tanggal awal" formControlName="startDate">
+        <input matEndDate placeholder="Tanggal akhir" formControlName="endDate">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
 
-  <mat-card class="mat-elevation-z8 mx-auto">
-    <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
+    <mat-card class="mat-elevation-z8 mx-auto">
+      <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
 
-    <ng-container *ngIf="usersGrowthByYear.length">
-      <div class="relative flex p-2">
-        <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
-          <mat-spinner class="m-auto"></mat-spinner>
+      <ng-container *ngIf="usersGrowthByYear.length">
+        <div class="relative flex p-2">
+          <div class="absolute inset-0 flex bg-black bg-opacity-50" *ngIf="utilitiesService.isLoading | async">
+            <mat-spinner class="m-auto"></mat-spinner>
+          </div>
+
+          <bar-chart [data]="usersGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Total Pengguna'"></bar-chart>
         </div>
-
-        <bar-chart [data]="usersGrowthByYear" [xAxisLabel]="'Tahun'" [yAxisLabel]="'Total Pengguna'"></bar-chart>
-      </div>
-    </ng-container>
-  </mat-card>
+      </ng-container>
+    </mat-card>
+  </div>
 </div>

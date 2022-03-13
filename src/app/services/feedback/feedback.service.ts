@@ -103,7 +103,9 @@ export class FeedbackService {
     const query = gql(`
       query {
         getAppFeedbacksGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
-          month,
+          monthName,
+          monthNumber,
+          year,
           feedbacks {
             Id,
             rating

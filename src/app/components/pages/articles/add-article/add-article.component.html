@@ -9,13 +9,11 @@
 
   <div class="flex flex-col items-center gap-y-4">
     <img [src]="headerImage" alt="" class="border rounded-xl object-contain w-96 h-52">
-    <ng-container *ngIf="author.value === 'admin'">
-      <input #fileInput type="file" (change)="onSelectFile($event)">
-    </ng-container>
+    <input #fileInput type="file" (change)="onSelectFile($event)">
   </div>
 
   <mat-card class="mat-elevation-z8 w-3/5 mx-auto mt-8">
-    <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async" ></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
     <mat-card-content class="flex flex-col gap-y-4">
       <mat-form-field class="w-full">
         <mat-label>Judul</mat-label>
@@ -53,7 +51,8 @@
     <span class="text-red-600 italic" *ngIf="content.hasError('required')">Isi konten tidak boleh kosong.</span>
     <div class="mat-elevation-z8 mt-2">
       <mat-progress-bar mode="indeterminate" *ngIf="utilitiesService.isLoading | async"></mat-progress-bar>
-      <quill-editor formControlName="content" [styles]="{ height: '30rem' }" (onEditorChanged)="onEditorChanged($event)"></quill-editor>
+      <quill-editor formControlName="content" [styles]="{ height: '30rem' }"
+        (onEditorChanged)="onEditorChanged($event)"></quill-editor>
     </div>
   </div>
 

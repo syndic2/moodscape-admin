@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { Store } from '@ngrx/store';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, exhaustMap, concatMap, mergeMap, switchMap } from 'rxjs/operators';
@@ -28,14 +26,14 @@ import { ConfirmationDialogComponent } from 'src/app/components/utilities/confir
 
 @Injectable()
 export class ArticleEffects {
-  getArticles$= createEffect(() => this.actions$.pipe(
+  getArticles$ = createEffect(() => this.actions$.pipe(
     ofType(fetchArticles),
     exhaustMap(() => this.articleService.getArticles().pipe(
       map(res => setArticles({ articles: res }))
     ))
   ));
 
-  validateCreateArticle$= createEffect(() => this.actions$.pipe(
+  validateCreateArticle$ = createEffect(() => this.actions$.pipe(
     ofType(validateCreateArticle),
     switchMap(({ fields, headerImgUpload, isInvalid }) => {
       if (isInvalid) {
@@ -58,7 +56,7 @@ export class ArticleEffects {
     })
   ));
 
-  createArticle$= createEffect(() => this.actions$.pipe(
+  createArticle$ = createEffect(() => this.actions$.pipe(
     ofType(fetchCreateArticle),
     concatMap(({ fields, headerImgUpload }) => this.articleService.createArticle(fields, headerImgUpload).pipe(
       switchMap(res => [
@@ -78,7 +76,7 @@ export class ArticleEffects {
     ))
   ));
 
-  validateUpdateArticle$= createEffect(() => this.actions$.pipe(
+  validateUpdateArticle$ = createEffect(() => this.actions$.pipe(
     ofType(validateUpdateArticle),
     switchMap(({ articleId, fields, headerImgUpload, isInvalid }) => {
       if (isInvalid) {
@@ -101,7 +99,7 @@ export class ArticleEffects {
     })
   ));
 
-  updateArticle$= createEffect(() => this.actions$.pipe(
+  updateArticle$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUpdateArticle),
     concatMap(({ articleId, fields, headerImgUpload }) => this.articleService.updateArticle(articleId, fields, headerImgUpload).pipe(
       switchMap(res => [
@@ -120,10 +118,10 @@ export class ArticleEffects {
     ))
   ));
 
-  removeArticlesConfirmation$= createEffect(() => this.actions$.pipe(
+  removeArticlesConfirmation$ = createEffect(() => this.actions$.pipe(
     ofType(removeArticlesConfirmation),
     exhaustMap(({ articleTitle, articleIds }) => {
-      const dialogRef= this.dialog.open(ConfirmationDialogComponent, {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           message: `Apa anda yakin ingin menghapus artikel: "${articleTitle}"?`,
           buttonText: {
@@ -144,13 +142,13 @@ export class ArticleEffects {
     })
   ), { dispatch: false });
 
-  removeArticles$= createEffect(() => this.actions$.pipe(
+  removeArticles$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveArticles),
     mergeMap(({ articleIds }) => this.articleService.removeArticles(articleIds).pipe(
       map(res => removeArticles({ articleIds: res.removedArticles }))
     ))
   ));
 
-  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private articleService: ArticleService) {}
+  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private articleService: ArticleService) { }
 }
 

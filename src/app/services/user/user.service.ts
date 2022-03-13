@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import StringifyObject from 'stringify-object';
 import gql from 'graphql-query-compress';
 
@@ -17,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getUsers {
           Id,
@@ -41,7 +39,7 @@ export class UserService {
   }
 
   getUsersGroupByGender(): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getUsersGroupByGender {
           males {
@@ -60,7 +58,7 @@ export class UserService {
   }
 
   getUsersGroupByAge(): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getUsersGroupByAge {
           children {
@@ -86,7 +84,7 @@ export class UserService {
           },
           elderly {
             group,
-            range, 
+            range,
             users {
               Id
             }
@@ -108,10 +106,11 @@ export class UserService {
   }
 
   getUsersGrowthByYear(startDate: string, endDate: string): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getUsersGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
-          month,
+          monthName,
+          monthNumber,
           users {
             Id
           }
@@ -125,7 +124,7 @@ export class UserService {
   }
 
   getUser(userId: string): Observable<any> {
-    const query= gql(`
+    const query = gql(`
       query {
         getUser(Id: "${userId}") {
           Id,
@@ -149,8 +148,8 @@ export class UserService {
   }
 
   updateUser(userId: string, fields: {}, imgUpload: File): Observable<any> {
-    const args= StringifyObject(fields, { singleQuotes: false });
-    const operations= {
+    const args = StringifyObject(fields, { singleQuotes: false });
+    const operations = {
       query: gql(`
         mutation($file: Upload) {
           updateUser(Id: \"${userId}\", fields: ${args}, imgUpload: $file) {
@@ -178,11 +177,11 @@ export class UserService {
         file: null
       }
     };
-    const _map= {
+    const _map = {
       file: ['variables.file']
     };
 
-    const formData= new FormData();
+    const formData = new FormData();
     formData.append('operations', JSON.stringify(operations));
     formData.append('map', JSON.stringify(_map));
     formData.append('file', imgUpload ? imgUpload : new File([], 'default'))
@@ -197,8 +196,8 @@ export class UserService {
     )
   }
 
-  removeUsers(userIds: string[], isSoftDelete: boolean= true): Observable<any> {
-    const query= gql(`
+  removeUsers(userIds: string[], isSoftDelete: boolean = true): Observable<any> {
+    const query = gql(`
       mutation {
         removeUsers(userIds: ${userIds.map(Id => `"${Id}"`)}, isSoftDelete: ${isSoftDelete}) {
           removedUsers,

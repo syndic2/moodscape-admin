@@ -52,6 +52,16 @@ export class AppFeedbackGraphsComponent implements OnInit, OnDestroy {
     this.startDate.setValue(initialStartDate);
     this.endDate.setValue(new Date());
 
+    const startDateSubscription = this.startDate.valueChanges.subscribe(value => {
+      if (value) {
+        this.store.dispatch(fetchAppFeedbacksGrowthByYear({
+          startDate: transformDateTime(value).toISODate(),
+          endDate: transformDateTime(this.endDate.value).toISODate()
+        }));
+      }
+    });
+    this.subscriptions.add(startDateSubscription);
+
     const endDateSubscription = this.endDate.valueChanges.subscribe(value => {
       if (value) {
         this.store.dispatch(fetchAppFeedbacksGrowthByYear({
@@ -91,7 +101,7 @@ export class AppFeedbackGraphsComponent implements OnInit, OnDestroy {
           endDate: transformDateTime(this.endDate.value).toISODate()
         }));
       } else {
-        this.appFeedbacksGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.averageRating }));
+        this.appFeedbacksGrowthByYear = [...res].map((object, index) => ({ name: object.monthName, value: object.averageRating }));
       }
     });
     this.subscriptions.add(getAppFeedbacksGrowthByYearSubscription);

@@ -51,14 +51,25 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
     this.startDate.setValue(initialStartDate);
     this.endDate.setValue(new Date());
 
-    this.endDate.valueChanges.subscribe(value => {
+    const startDateSubscription = this.startDate.valueChanges.subscribe(value => {
+      if (value) {
+        this.store.dispatch(fetchUsersGrowthByYear({
+          startDate: transformDateTime(value).toISODate(),
+          endDate: transformDateTime(this.endDate.value).toISODate()
+        }));
+      }
+    });
+    this.subscriptions.add(startDateSubscription);
+
+    const endDateSubscription = this.endDate.valueChanges.subscribe(value => {
       if (value) {
         this.store.dispatch(fetchUsersGrowthByYear({
           startDate: transformDateTime(this.startDate.value).toISODate(),
           endDate: transformDateTime(value).toISODate()
         }));
       }
-    })
+    });
+    this.subscriptions.add(endDateSubscription);
   }
 
   loadData() {
@@ -101,7 +112,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
       if (!res.length) {
         this.usersGrowthByYear = [];
       } else {
-        this.usersGrowthByYear = [...res].map((object, index) => ({ name: object.month, value: object.users.length }));
+        this.usersGrowthByYear = [...res].map((object, index) => ({ name: object.monthName, value: object.users.length }));
       }
     });
     this.subscriptions.add(getUsersGrowthByYearSubscription);

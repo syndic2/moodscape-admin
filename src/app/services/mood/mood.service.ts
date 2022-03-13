@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import gqlCompress from 'graphql-query-compress';
@@ -36,7 +35,9 @@ export class MoodService {
     const query = gqlCompress(`
       query {
         getMoodsGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
-          month,
+          monthName,
+          monthNumber,
+          year,
           moodCount,
           moodAverage
         }

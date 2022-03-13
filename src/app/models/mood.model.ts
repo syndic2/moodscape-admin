@@ -15,7 +15,9 @@ export interface TotalMoodGroupByType {
 }
 
 export interface MoodsGrowthByYear {
-  month: string;
+  monthName: string;
+  monthNumber: number;
+  year: number;
   moodCount: number;
   moodAverage: number;
 }
