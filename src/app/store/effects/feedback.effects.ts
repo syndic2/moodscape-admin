@@ -39,6 +39,57 @@ import { ConfirmationDialogComponent } from 'src/app/components/utilities/confir
 @Injectable()
 export class FeedbackEffects {
   /**
+   * Chatbot feedback
+   */
+  getChatbotFeedbacks$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchChatbotFeedbacks),
+    exhaustMap(() => this.feedbackService.getChatbotFeedbacks().pipe(
+      map(res => setChatbotFeedbacks({ feedbacks: res }))
+    ))
+  ));
+
+  handleChatbotFeedback$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchHandleChatbotFeedback),
+    exhaustMap(({ feedbackId, handleStatus, handleNote }) => this.feedbackService.handleChatbotFeedback(feedbackId, handleStatus, handleNote).pipe(
+      map(() => handleChatbotFeedback({ feedbackId, handleStatus, handleNote }))
+    ))
+  ));
+
+  removeChatbotFeedbacksConfirmation$ = createEffect(() => this.actions$.pipe(
+    ofType(removeChatbotFeedbacksConfirmation),
+    exhaustMap(({ feedbackIds }) => {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: 'Apakah anda yakin ingin menghapus umpan balik ini?',
+          buttonText: {
+            ok: 'Ya',
+            cancel: 'Tidak'
+          },
+          checkBox: {
+            text: 'Hapus kasar'
+          }
+        }
+      });
+
+      return dialogRef.afterClosed().pipe(
+        map(data => ({ dialogData: data, feedbackIds: feedbackIds }))
+      );
+    }),
+    map(({ dialogData, feedbackIds }) => {
+      if (dialogData.confirmation === 'yes') {
+        this.store.dispatch(fetchRemoveChatbotFeedbacks({ feedbackIds: feedbackIds, isSoftDelete: !dialogData.checkBoxChecked ? true : false }));
+      }
+    })
+  ), { dispatch: false });
+
+  removeChatbotFeedbacks$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchRemoveChatbotFeedbacks),
+    mergeMap(({ feedbackIds, isSoftDelete }) => this.feedbackService.removeChatbotFeedbacks(feedbackIds, isSoftDelete).pipe(
+      map(res => removeChatbotFeedbacks({ feedbackIds: res.removedFeedbacks }))
+    ))
+  ));
+
+  /**
    * App feedback
    */
   getAppFeedbacks$ = createEffect(() => this.actions$.pipe(
@@ -65,7 +116,7 @@ export class FeedbackEffects {
   handleAppFeedback$ = createEffect(() => this.actions$.pipe(
     ofType(fetchHandleAppFeedback),
     exhaustMap(({ feedbackId, handleStatus, handleNote }) => this.feedbackService.handleAppFeedback(feedbackId, handleStatus, handleNote).pipe(
-      map(() => handleChatbotFeedback({ feedbackId, handleStatus, handleNote }))
+      map(() => handleAppFeedback({ feedbackId, handleStatus, handleNote }))
     ))
   ));
 
@@ -78,6 +129,9 @@ export class FeedbackEffects {
           buttonText: {
             ok: 'Ya',
             cancel: 'Tidak'
+          },
+          checkBox: {
+            text: 'Hapus kasar'
           }
         }
       });
@@ -88,63 +142,15 @@ export class FeedbackEffects {
     }),
     map(({ dialogData, feedbackIds }) => {
       if (dialogData.confirmation === 'yes') {
-        this.store.dispatch(fetchRemoveAppFeedbacks({ feedbackIds: feedbackIds }));
+        this.store.dispatch(fetchRemoveAppFeedbacks({ feedbackIds: feedbackIds, isSoftDelete: !dialogData.checkBoxChecked ? true : false }));
       }
     })
   ), { dispatch: false });
 
   removeAppFeedbacks$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveAppFeedbacks),
-    mergeMap(({ feedbackIds }) => this.feedbackService.removeAppFeedbacks(feedbackIds).pipe(
+    mergeMap(({ feedbackIds, isSoftDelete }) => this.feedbackService.removeAppFeedbacks(feedbackIds).pipe(
       map(res => removeAppFeedbacks({ feedbackIds: res.removedFeedbacks }))
-    ))
-  ));
-
-  /**
-   * Chatbot feedback
-   */
-  getChatbotFeedbacks$ = createEffect(() => this.actions$.pipe(
-    ofType(fetchChatbotFeedbacks),
-    exhaustMap(() => this.feedbackService.getChatbotFeedbacks().pipe(
-      map(res => setChatbotFeedbacks({ feedbacks: res }))
-    ))
-  ));
-
-  handleChatbotFeedback$ = createEffect(() => this.actions$.pipe(
-    ofType(fetchHandleChatbotFeedback),
-    exhaustMap(({ feedbackId, handleStatus, handleNote }) => this.feedbackService.handleChatbotFeedback(feedbackId, handleStatus, handleNote).pipe(
-      map(() => handleChatbotFeedback({ feedbackId, handleStatus, handleNote }))
-    ))
-  ));
-
-  removeChatbotFeedbacksConfirmation$ = createEffect(() => this.actions$.pipe(
-    ofType(removeChatbotFeedbacksConfirmation),
-    exhaustMap(({ feedbackIds }) => {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          message: 'Apakah anda yakin ingin menghapus umpan balik ini?',
-          buttonText: {
-            ok: 'Ya',
-            cancel: 'Tidak'
-          }
-        }
-      });
-
-      return dialogRef.afterClosed().pipe(
-        map(data => ({ dialogData: data, feedbackIds: feedbackIds }))
-      );
-    }),
-    map(({ dialogData, feedbackIds }) => {
-      if (dialogData.confirmation === 'yes') {
-        this.store.dispatch(fetchRemoveChatbotFeedbacks({ feedbackIds: feedbackIds }));
-      }
-    })
-  ), { dispatch: false });
-
-  removeChatbotFeedbacks$ = createEffect(() => this.actions$.pipe(
-    ofType(fetchRemoveChatbotFeedbacks),
-    mergeMap(({ feedbackIds }) => this.feedbackService.removeChatbotFeedbacks(feedbackIds).pipe(
-      map(res => removeChatbotFeedbacks({ feedbackIds: res.removedFeedbacks }))
     ))
   ));
 

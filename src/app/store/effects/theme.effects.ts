@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { Store } from '@ngrx/store';
 import { map, switchMap, exhaustMap, concatMap, mergeMap } from 'rxjs/operators';
 
 import { showDialog, setIsResetForm } from '../actions/application.actions';
-import { 
-  fetchThemes, 
+import {
+  fetchThemes,
   fetchTheme,
-  validateCreateTheme, 
+  validateCreateTheme,
   fetchCreateTheme,
-  validateUpdateTheme, 
-  fetchUpdateTheme, 
+  validateUpdateTheme,
+  fetchUpdateTheme,
   removeThemesConfirmation,
   fetchRemoveThemes,
-  
+
   setThemes,
   createTheme,
   updateTheme,
@@ -27,14 +25,14 @@ import { ConfirmationDialogComponent } from 'src/app/components/utilities/confir
 
 @Injectable()
 export class ThemeEffects {
-  getThemes$= createEffect(() => this.actions$.pipe(
+  getThemes$ = createEffect(() => this.actions$.pipe(
     ofType(fetchThemes),
     exhaustMap(() => this.themeService.getThemes().pipe(
       map(res => setThemes({ themes: res }))
     ))
   ));
-  
-  validateCreateTheme$= createEffect(() => this.actions$.pipe(
+
+  validateCreateTheme$ = createEffect(() => this.actions$.pipe(
     ofType(validateCreateTheme),
     switchMap(({ fields, isInvalid }) => {
       if (isInvalid) {
@@ -56,16 +54,16 @@ export class ThemeEffects {
       return [fetchCreateTheme({ fields: fields })];
     })
   ));
-  
-  createTheme$= createEffect(() => this.actions$.pipe(
+
+  createTheme$ = createEffect(() => this.actions$.pipe(
     ofType(fetchCreateTheme),
     concatMap(({ fields }) => this.themeService.createTheme(fields).pipe(
       switchMap(res => {
         if (!res.response.status) {
           return [
             setIsResetForm({ isReset: false }),
-            showDialog({ 
-              config: { 
+            showDialog({
+              config: {
                 data: {
                   message: res.response.text,
                   buttonText: {
@@ -79,8 +77,8 @@ export class ThemeEffects {
 
         return [
           setIsResetForm({ isReset: true }),
-          showDialog({ 
-            config: { 
+          showDialog({
+            config: {
               data: {
                 message: res.response.text,
                 buttonText: {
@@ -95,9 +93,9 @@ export class ThemeEffects {
     ))
   ));
 
-  validateUpdateTheme$= createEffect(() => this.actions$.pipe(
+  validateUpdateTheme$ = createEffect(() => this.actions$.pipe(
     ofType(validateUpdateTheme),
-    map(({ themeId, fields, isInvalid}) => {
+    map(({ themeId, fields, isInvalid }) => {
       if (isInvalid) {
         return showDialog({
           config: {
@@ -115,14 +113,14 @@ export class ThemeEffects {
     })
   ));
 
-  updateTheme$= createEffect(() => this.actions$.pipe(
+  updateTheme$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUpdateTheme),
     exhaustMap(({ themeId, fields }) => this.themeService.updateTheme(themeId, fields).pipe(
       switchMap(res => {
         if (!res.response.status) {
           return [
-            showDialog({ 
-              config: { 
+            showDialog({
+              config: {
                 data: {
                   message: res.response.text,
                   buttonText: {
@@ -135,8 +133,8 @@ export class ThemeEffects {
         }
 
         return [
-          showDialog({ 
-            config: { 
+          showDialog({
+            config: {
               data: {
                 message: res.response.text,
                 buttonText: {
@@ -151,15 +149,18 @@ export class ThemeEffects {
     ))
   ));
 
-  removeThemesConfirmation$= createEffect(() => this.actions$.pipe(
+  removeThemesConfirmation$ = createEffect(() => this.actions$.pipe(
     ofType(removeThemesConfirmation),
     exhaustMap(({ themeIds }) => {
-      const dialogRef= this.dialog.open(ConfirmationDialogComponent, {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           message: 'Apa anda yakin ingin menghapus tema ini?',
           buttonText: {
             ok: 'Ya',
             cancel: 'Tidak'
+          },
+          checkBox: {
+            text: 'Hapus kasar'
           }
         }
       });
@@ -170,17 +171,17 @@ export class ThemeEffects {
     }),
     map(res => {
       if (res.dialogData.confirmation === 'yes') {
-        this.store.dispatch(fetchRemoveThemes({ themeIds: res.themeIds }))
+        this.store.dispatch(fetchRemoveThemes({ themeIds: res.themeIds, isSoftDelete: !res.dialogData.checkBoxChecked ? true : false }))
       }
     })
   ), { dispatch: false });
 
-  removeThemes$= createEffect(() => this.actions$.pipe(
+  removeThemes$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveThemes),
-    mergeMap(({ themeIds }) => this.themeService.removeThemes(themeIds).pipe(
+    mergeMap(({ themeIds, isSoftDelete }) => this.themeService.removeThemes(themeIds, isSoftDelete).pipe(
       map(res => removeThemes({ themeIds: res.removedThemes }))
     ))
   ));
-    
-  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private themeService: ThemeService) {}
+
+  constructor(private store: Store, private actions$: Actions, private dialog: MatDialog, private themeService: ThemeService) { }
 }

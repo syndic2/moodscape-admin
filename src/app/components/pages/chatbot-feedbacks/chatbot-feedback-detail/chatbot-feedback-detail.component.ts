@@ -18,6 +18,7 @@ export class ChatbotFeedbackDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.data);
   }
 
   close() {

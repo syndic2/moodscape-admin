@@ -32,21 +32,21 @@
       <ng-container matColumnDef="primaryColor">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Warna Utama</th>
         <td mat-cell *matCellDef="let theme">
-         <div class="flex gap-x-2">
+          <div class="flex gap-x-2">
             <ng-container *ngFor="let item of theme.colors | keyvalue">
-              <div 
-                *ngIf="item.key !== 'primaryRgb' && item.key !== 'primaryContrast' && item.key !== 'primaryContrastRgb'" 
-                class="rounded-full w-6 h-6"
-                [style.background]="item.value">
+              <div
+                *ngIf="item.key !== 'primaryRgb' && item.key !== 'primaryContrast' && item.key !== 'primaryContrastRgb'"
+                class="rounded-full w-6 h-6" [style.background]="item.value">
               </div>
             </ng-container>
-         </div>
+          </div>
         </td>
       </ng-container>
-      
+
       <ng-container matColumnDef="isActive">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Penulis</th>
-        <td mat-cell *matCellDef="let theme" [ngClass]="{ 'text-green-500': theme.isActive, 'text-red-500': !theme.isActive }">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let theme"
+          [ngClass]="{ 'text-green-500': theme.isActive, 'text-red-500': !theme.isActive }">
           {{ theme.isActive ? 'Aktif' : 'Tidak aktif' }}
         </td>
       </ng-container>

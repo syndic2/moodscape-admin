@@ -1,6 +1,31 @@
 import { User } from './user.model';
 
 /**
+ * Chatbot feedback
+ */
+export interface ChatbotMessage {
+  Id: string;
+  sender: string | number;
+  recipientId: string | number;
+  text: string;
+  videoUrl: string;
+}
+
+export interface ChatbotFeedback {
+  Id: string;
+  review: string;
+  botMessage: ChatbotMessage;
+  messages: ChatbotMessage[];
+  user: User;
+  handleStatus: string;
+  handleNote: string;
+  createdAt: {
+    date: string;
+    time: string;
+  }
+}
+
+/**
  * App feedback
  */
 export interface AppFeedback {
@@ -37,28 +62,4 @@ export interface AppFeedbacksGrowthByYear {
   year: number;
   feedbacks: AppFeedback[];
   averageRating: number;
-}
-
-/**
- * Chatbot feedback
- */
-export interface ChatbotMessage {
-  Id: string;
-  sender: string | number;
-  recipientId: string | number;
-  text: string;
-}
-
-export interface ChatbotFeedback {
-  Id: string;
-  review: string;
-  botMessage: ChatbotMessage;
-  messages: ChatbotMessage[];
-  user: User;
-  handleStatus: string;
-  handleNote: string;
-  createdAt: {
-    date: string;
-    time: string;
-  }
 }

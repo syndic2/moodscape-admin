@@ -100,10 +100,10 @@ export class ThemeService {
     );
   }
 
-  removeThemes(themeIds: string[]): Observable<any> {
+  removeThemes(themeIds: string[], isSoftDelete: boolean = true): Observable<any> {
     const query = gql(`
       mutation {
-        removeThemes(themeIds: ${themeIds.map(Id => `"${Id}"`)}) {
+        removeThemes(themeIds: ${themeIds.map(Id => `"${Id}"`)}, isSoftDelete: ${isSoftDelete}) {
           removedThemes,
           response {
             text,

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { Store } from '@ngrx/store';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { map, switchMap, exhaustMap, mergeMap } from 'rxjs/operators';

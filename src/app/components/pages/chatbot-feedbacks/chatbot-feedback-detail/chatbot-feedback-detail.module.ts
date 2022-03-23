@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { ChatbotFeedbackDetailComponent } from './chatbot-feedback-detail.component';
+import { SafeUrlPipe } from 'src/app/pipes/safe-url/safe-url.pipe';
 
 const Materials = [
   MatIconModule,
@@ -13,11 +14,14 @@ const Materials = [
 ];
 
 @NgModule({
-  declarations: [ChatbotFeedbackDetailComponent],
+  declarations: [
+    ChatbotFeedbackDetailComponent,
+    SafeUrlPipe
+  ],
   imports: [
     CommonModule,
     ...Materials,
-    ScrollingModule
+    ScrollingModule,
   ],
   exports: [ChatbotFeedbackDetailComponent]
 })
