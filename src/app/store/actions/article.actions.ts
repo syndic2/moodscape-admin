@@ -37,7 +37,7 @@ export const removeArticlesConfirmation = createAction(
 
 export const fetchRemoveArticles = createAction(
   '[Article/API] Remove articles',
-  props<{ articleIds: number[] }>()
+  props<{ articleIds: number[], isSoftDelete: boolean }>()
 );
 
 //STORE

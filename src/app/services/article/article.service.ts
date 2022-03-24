@@ -155,10 +155,10 @@ export class ArticleService {
     );
   }
 
-  removeArticles(articleIds: number[]): Observable<any> {
+  removeArticles(articleIds: number[], isSoftDelete: boolean): Observable<any> {
     const query = gql(`
       mutation {
-        removeArticles(articleIds: ${articleIds}) {
+        removeArticles(articleIds: ${articleIds}, isSoftDelete: ${isSoftDelete}) {
           removedArticles,
           response {
             text,

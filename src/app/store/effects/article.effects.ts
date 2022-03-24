@@ -127,6 +127,9 @@ export class ArticleEffects {
           buttonText: {
             ok: 'Ya',
             cancel: 'Tidak'
+          },
+          checkBox: {
+            text: 'Hapus kasar'
           }
         }
       });
@@ -137,14 +140,14 @@ export class ArticleEffects {
     }),
     map(res => {
       if (res.dialogData.confirmation === 'yes') {
-        this.store.dispatch(fetchRemoveArticles({ articleIds: res.articleIds }));
+        this.store.dispatch(fetchRemoveArticles({ articleIds: res.articleIds, isSoftDelete: !res.dialogData.checkBoxChecked ? true : false }));
       }
     })
   ), { dispatch: false });
 
   removeArticles$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRemoveArticles),
-    mergeMap(({ articleIds }) => this.articleService.removeArticles(articleIds).pipe(
+    mergeMap(({ articleIds, isSoftDelete }) => this.articleService.removeArticles(articleIds, isSoftDelete).pipe(
       map(res => removeArticles({ articleIds: res.removedArticles }))
     ))
   ));
