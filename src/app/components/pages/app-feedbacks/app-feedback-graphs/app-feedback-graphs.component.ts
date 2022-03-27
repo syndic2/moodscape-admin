@@ -101,7 +101,7 @@ export class AppFeedbackGraphsComponent implements OnInit, OnDestroy {
           endDate: transformDateTime(this.endDate.value).toISODate()
         }));
       } else {
-        this.appFeedbacksGrowthByYear = [...res].map((object, index) => ({ name: object.monthName, value: object.averageRating }));
+        this.appFeedbacksGrowthByYear = [...res].map((object, index) => ({ name: `${object.monthName} - ${object.year}`, value: object.averageRating }));
       }
     });
     this.subscriptions.add(getAppFeedbacksGrowthByYearSubscription);

@@ -111,6 +111,7 @@ export class UserService {
         getUsersGrowthByYear(startDate: "${startDate}", endDate: "${endDate}") {
           monthName,
           monthNumber,
+          year,
           users {
             Id
           }

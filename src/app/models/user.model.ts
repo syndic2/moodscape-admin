@@ -34,5 +34,6 @@ export interface UsersGroupByAge {
 export interface UsersGrowthByYear {
   monthName: string;
   monthNumber: number;
+  year: number;
   users: [];
 };

@@ -8,6 +8,7 @@ export interface ChatbotMessage {
   sender: string | number;
   recipientId: string | number;
   text: string;
+  imageUrl: string;
   videoUrl: string;
 }
 

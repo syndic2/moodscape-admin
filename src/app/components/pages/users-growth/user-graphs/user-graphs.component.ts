@@ -112,7 +112,7 @@ export class UserGraphsComponent implements OnInit, OnDestroy {
       if (!res.length) {
         this.usersGrowthByYear = [];
       } else {
-        this.usersGrowthByYear = [...res].map((object, index) => ({ name: object.monthName, value: object.users.length }));
+        this.usersGrowthByYear = [...res].map((object, index) => ({ name: `${object.monthName}-${object.year}`, value: object.users.length }));
       }
     });
     this.subscriptions.add(getUsersGrowthByYearSubscription);

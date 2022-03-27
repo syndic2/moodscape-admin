@@ -10,7 +10,7 @@ const urls = {
   apiUrl: {
     development: 'http://127.0.0.1:5000/api/graphql',
     production: 'https://moodscape-api.herokuapp.com/api/graphql',
-  },
+  }
 };
 
 export const environment = {

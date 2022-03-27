@@ -57,18 +57,23 @@
           <ng-template #showBotMessage>
             <div class="self-start flex flex-col gap-y-1 max-w-1/2">
               <span class="text-left">BOT</span>
-              <ng-container *ngIf="message?.videoUrl; else showMessageText">
+              <ng-container *ngIf="message?.imageUrl">
+                <img [src]="message.imageUrl" alt="" width="250">
+              </ng-container>
+
+              <ng-container *ngIf="message?.videoUrl">
                 <iframe width="300" height="150" [src]="message.videoUrl | safeUrl" title="YouTube video player"
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen>
                 </iframe>
               </ng-container>
-              <ng-template #showMessageText>
+
+              <ng-container *ngIf="!message.imageUrl && !message.videoUrl">
                 <div class="rounded-xl bg-gray-200 p-3">
                   <p class="whitespace-pre-wrap text-sm my-0">{{ message.text }}</p>
                 </div>
-              </ng-template>
+              </ng-container>
               <span *ngIf="last" class="text-left text-red-400">*Pesan yang diulas</span>
             </div>
           </ng-template>

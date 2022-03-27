@@ -113,7 +113,7 @@ export class MoodGraphsComponent implements OnInit, OnDestroy {
       if (!res.length) {
         this.moodsGrowthByYear = [];
       } else {
-        this.moodsGrowthByYear = [...res].map((object, index) => ({ name: object.monthName, value: object.moodAverage }));
+        this.moodsGrowthByYear = [...res].map((object, index) => ({ name: `${object.monthName} - ${object.year}`, value: object.moodAverage }));
         this.moodsGrowthByYear.forEach(moodGrowth => {
           let data: { name: string, value: string };
 

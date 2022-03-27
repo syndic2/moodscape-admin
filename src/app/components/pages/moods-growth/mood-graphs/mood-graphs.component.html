@@ -35,8 +35,8 @@
     <mat-form-field appearance="fill" class="w-fit-content mx-auto">
       <mat-label>Pilih tanggal awal dan akhir</mat-label>
       <mat-date-range-input [rangePicker]="picker" [formGroup]="moodsGrowthRangePicker">
-        <input matStartDate placeholder="Tanggal awal" formControlName="startDate">
-        <input matEndDate placeholder="Tanggal akhir" formControlName="endDate">
+        <input matStartDate placeholder="Tanggal awal" formControlName="startDate" readonly>
+        <input matEndDate placeholder="Tanggal akhir" formControlName="endDate" readonly>
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>

@@ -32,6 +32,7 @@ export class FeedbackService {
               sender,
               recipientId,
               text,
+              imageUrl,
               videoUrl
             },
             user {
